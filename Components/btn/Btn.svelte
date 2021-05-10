@@ -10,14 +10,14 @@ disabled={disabled}
 </button>
 
 <script lang="ts">
-    export let value:string = '' ;
-    export let block:boolean = true;
-    export let uppercase:boolean = false;
-    export let pill:boolean = false;
+    export let block:boolean = false;
     export let color:string = '';
-    export let solid:boolean = true;
-    export let quiet:boolean = false;
     export let disabled:boolean = false;
+    export let pill:boolean = false;
+    export let quiet:boolean = false;
+    export let solid:boolean = true;
+    export let uppercase:boolean = false;
+    export let value:string = '' ;
 
 
     import { onMount } from 'svelte';
@@ -101,10 +101,12 @@ disabled={disabled}
         --border-opacity--std: 0.65;
 
         --opacity--disabled: 0.45;
-        --opacity-accent: 0.22;
-        --opacity-accent--hover: 0.5;
+        --opacity-accent: 0.65;
+        --opacity-accent--hover: .85;
+        --opacity-accent--active: 1.0;
         --opacity--quiet: .15;
-        --opacity--quiet--hover: .25;
+        --opacity--quiet--hover: .45;
+        --opacity--quiet--active: .65;
 
 
         font-family: 'Open Sans', sans-serif;
@@ -115,36 +117,33 @@ disabled={disabled}
         
         background-color: var(--button);
         padding: 0rem var(--padding-x);
-        border: var(--border-width) solid var(--button-primary-border);
+        border: var(--border-width) solid transparent;
         border-radius: var(--border-rad);
         height: var(--height);
         position: relative;
         z-index: 1;
         &::after {
             content: '';
-            box-sizing: border-box;
-            border-radius: var(--border-rad);
-            // box-shadow: 0 0 2rem 0 var(--button-color);
-            border: var(--border-width) solid transparent;
             position: absolute;
-            // width: 100%;
-            // height: 100%;
-            // top: 0;
-            // left: 0;
             left: calc(var(--border-width) * -1);
             top: calc(var(--border-width) * -1);
             width: calc(100% + var(--border-width) * 2);
             height: calc(100% + var(--border-width) * 2);
+            box-sizing: border-box;
+            border-radius: var(--border-rad);
+            border: var(--border-width) solid var(--button-primary-border);
             opacity: var(--opacity-accent);
-            z-index: 0;
             transition: opacity .23s cubic-bezier(.58,.19,.22,1);
+            z-index: -1;
         }
         &:hover::after {
             opacity: var(--opacity-accent--hover);
         }
+        &:active::after {
+            opacity: var(--opacity-accent--active);
+        }
         &:disabled {
-            color: rgba(125,125,125, var(--opacity--disabled));
-            border: var(--border-width) solid rgba(125,125,125, var(--opacity--disabled));
+            opacity: var(--opacity--disabled);
             pointer-events: none;
             &::after {
                 box-shadow: none;
@@ -167,73 +166,36 @@ disabled={disabled}
         padding-right: calc(var(--padding-x)*1.5);
         position: relative;
         &::after {
-            content: '';
-            // width: 100%;
-            // height: 100%;
-            // position: absolute;
-            // top: 0;
-            // left: 0;
             border-radius: calc(var(--height)/2);
         }
     }
 
-    .solid:not(.quiet) {
-        // background-color: transparent;
-        background-color: var(--button-filled);
+    .solid {
+        color: var(--button);
         border-color: transparent;
         &::after {
+            background-color: var(--button-color);
+            border-color: transparent;
             box-shadow: none;
-            border: var(--border-width ) solid var(--button-color);
-            // opacity: 0;
-            // z-index: 1;
-            // transition: opacity .23s cubic-bezier(.58,.19,.22,1);
-            // box-shadow: 0 0 2rem 0 var(--button-filled-active);
-            &:disabled {
-                box-shadow: none;
-            }
-        // &:hover::after {
-        //     opacity: var(--opacity-accent--hover);
-        // }
-            // border: var(--border-width) solid --button-filled;
-            // background-color: greenyellow;
-            // z-index: 5;
-            // opacity: .2;
-            // left: calc(var(--border-width) * -1);
-            // top: calc(var(--border-width) * -1);
-            // width: calc(100% + var(--border-width) * 2);
-            // height: calc(100% + var(--border-width) * 2);
         }
-        // color: var(--color-bg);
-        &:disabled {
-            // border: var(--border-width) transparent;
-            background-color: rgba(125,125,125, .45); 
+        &:disabled::after {
+            border-color: transparent;
         }
     }
 
     .quiet {
         border-color: transparent;
-        &:disabled {
-            background-color: rgba(128,128,128,0.1);
-            border-color: transparent;
-            &::after {
-                opacity: 0;
-            }
-        }
         &::after {
-            content: '';
-            // width: 100%;
-            // height: 100%;
             box-shadow: none;
-            // position: absolute;
-            // top: 0;
-            // left: 0;
             opacity: var(--opacity--quiet);
             background-color: var(--button-filled);
-            // z-index: 0;
             border-color: transparent;
         }
         &:hover::after {
             opacity: var(--opacity--quiet--hover);
+        }
+        &:active::after {
+            opacity: var(--opacity--quiet--active);
         }
 
     }
