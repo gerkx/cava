@@ -10,6 +10,8 @@ disabled={disabled}
 </button>
 
 <script lang="ts">
+
+
     export let block:boolean = false;
     export let color:string = '';
     export let disabled:boolean = false;
@@ -19,18 +21,18 @@ disabled={disabled}
     export let uppercase:boolean = false;
     export let value:string = '' ;
 
-
+    
     import { onMount } from 'svelte';
-
+    
     import starlette from 'starlette';
-
+    
     import { parseColorString } from '../../utils/color/parseColorString'
 
-
+    
     onMount(() => {
-        console.log('beep')
         // starlette.init();
-        starlette.initAs('AEFT', 'gradient', 0);
+        // starlette.initAs('AEFT', 'gradient', 0);
+        console.log('harp')
         console.log(window.getComputedStyle(document.documentElement)
             .getPropertyValue('--tabs-active')
         )
@@ -91,13 +93,13 @@ disabled={disabled}
         --color--accent: var(--color--primary);
 
         --height: #{$input-height};
-        --padding-x: #{$btn--padding-x};
+        --padding-x: #{$input-padding--x};
 
         --border-rad--std: #{$input-border-rad--std};
         --border-rad--pill: #{$input-border-rad--pill};
         --border-rad: var(--border-rad--std);
 
-        --border-width: .1rem;
+        --border-width: #{$input-border--width};
         --border-opacity--std: 0.65;
 
         --opacity--disabled: 0.45;
@@ -124,16 +126,16 @@ disabled={disabled}
         z-index: 1;
         &::after {
             content: '';
-            position: absolute;
-            left: calc(var(--border-width) * -1);
-            top: calc(var(--border-width) * -1);
-            width: calc(100% + var(--border-width) * 2);
-            height: calc(100% + var(--border-width) * 2);
-            box-sizing: border-box;
             border-radius: var(--border-rad);
             border: var(--border-width) solid var(--button-primary-border);
+            box-sizing: border-box;
+            height: calc(100% + var(--border-width) * 2);
+            left: calc(var(--border-width) * -1);
+            position: absolute;
+            top: calc(var(--border-width) * -1);
             opacity: var(--opacity-accent);
             transition: opacity .23s cubic-bezier(.58,.19,.22,1);
+            width: calc(100% + var(--border-width) * 2);
             z-index: -1;
         }
         &:hover::after {
@@ -171,25 +173,22 @@ disabled={disabled}
     }
 
     .solid {
-        color: var(--button);
         border-color: transparent;
+        color: var(--button);
         &::after {
             background-color: var(--button-color);
             border-color: transparent;
             box-shadow: none;
-        }
-        &:disabled::after {
-            border-color: transparent;
         }
     }
 
     .quiet {
         border-color: transparent;
         &::after {
-            box-shadow: none;
-            opacity: var(--opacity--quiet);
             background-color: var(--button-filled);
             border-color: transparent;
+            box-shadow: none;
+            opacity: var(--opacity--quiet);
         }
         &:hover::after {
             opacity: var(--opacity--quiet--hover);

@@ -3,25 +3,22 @@
   *    Styles                  *
   ==============================
  -->
-<style type="text/scss">
-  :root {
-    font-size:16px;
-    box-sizing: border-box;
-    --color-bg: rgb(35,35,35)
-  }  
 
-  div {
-    background-color: var(--color-bg);
-    padding: 5rem;
-    height: 150px;
-    font-size: 25px;
-  }
-</style>
 
 
 <script lang='ts'>
   import { Meta, Template, Story } from "@storybook/addon-svelte-csf";
+  import starlette from 'starlette';
+  import { onMount } from 'svelte';
   import Btn from "./Btn.svelte";
+  import StoryWrapper from "../storybookUtils/StoryWrapper.svelte";
+  // import Panel from '../panel/Panel.svelte';
+
+  onMount(() => {
+        starlette.initAs('AEFT', 'gradient', 0);
+
+    })
+
 </script>
 
 <Meta
@@ -36,16 +33,19 @@
 />
 
 <Template let:args>
-  <div>
-    <Btn {...args}>
-    </Btn>
-  </div>
+  <StoryWrapper>
+      <Btn {...args}>
+      </Btn>
+  </StoryWrapper>
 </Template>
 
 <Story
   name="Base Button"
   args={{
-    value: 'base'
+    value: 'base',
+    props: {
+      beep: 'herp'
+    }
     // uppercase: false,
     // block: false,
   }}
