@@ -6,14 +6,7 @@
     import { onMount } from 'svelte';
     import starlette from 'starlette';
 
-    onMount(() => {
-        // starlette.init();
-        starlette.initAs('AEFT', 'gradient', 0);
-        // console.log('harp')
-        console.log(window.getComputedStyle(document.documentElement)
-            .getPropertyValue('--tabs-active')
-        )
-    })
+    onMount(() => starlette.initAs('AEFT', 'gradient', 0))
 </script>
 
 <style lang="scss">

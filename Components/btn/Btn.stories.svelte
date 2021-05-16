@@ -3,7 +3,12 @@
   *    Styles                  *
   ==============================
  -->
-
+<style>
+  div {
+    display: flex;
+    gap: .1rem;
+  }
+</style>
 
 
 <script lang='ts'>
@@ -34,8 +39,19 @@
 
 <Template let:args>
   <StoryWrapper>
-      <Btn {...args}>
+    <div>
+      <Btn {...args} >
       </Btn>
+      <Btn {...args} size='xs'>
+      </Btn>
+      <Btn {...args} size='s'>
+      </Btn>
+      <Btn {...args} size='l' >
+      </Btn>
+      <Btn {...args} size='xl' >
+      </Btn>
+
+    </div>
   </StoryWrapper>
 </Template>
 
@@ -43,9 +59,6 @@
   name="Base Button"
   args={{
     value: 'base',
-    props: {
-      beep: 'herp'
-    }
     // uppercase: false,
     // block: false,
   }}

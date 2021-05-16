@@ -4,120 +4,116 @@ class:solid
 class:uppercase
 class:quiet 
 class:pill
+class:active
+class={_class}
 disabled={disabled}
+style={customCSSVars}
 >
     {value}
 </button>
 
 <script lang="ts">
-
-
+    import { parseColorString } from '../../utils/color/parseColorString';
+    import type { buttonAccentKey, buttonFontKey, buttonSize, buttonScaleKey} from '../../typings';
+    import { genCssPropStr } from '../../utils/style/cssVarUtils';
+    
+    ///////////
+    // PROPS //
+    ///////////
+    export let active:boolean = false;
     export let block:boolean = false;
-    export let color:string = '';
+    export let accentColor:string = '';
+    export let fontColor:string = '';
     export let disabled:boolean = false;
     export let pill:boolean = false;
     export let quiet:boolean = false;
-    export let solid:boolean = true;
+    export let solid:boolean = false;
     export let uppercase:boolean = false;
     export let value:string = '' ;
+    export let size:buttonSize = null;
+    let _class:string= '';
+    export {_class as class}
+    
+    $: customCSSVars = setCustomVars();
 
-    
-    import { onMount } from 'svelte';
-    
-    import starlette from 'starlette';
-    
-    import { parseColorString } from '../../utils/color/parseColorString'
+    const setCustomVars = (): string => {
+        let vals: string[] = [];
 
-    
-    onMount(() => {
-        // starlette.init();
-        // starlette.initAs('AEFT', 'gradient', 0);
-        console.log('harp')
-        console.log(window.getComputedStyle(document.documentElement)
-            .getPropertyValue('--tabs-active')
-        )
-    })
-    
-    const setCustomProps = (): string => {
-        let str:string = '';
+        // set custom colours
         switch (true) {
-            case pill:
-                str += '--border-rad: var(--border-rad--pill);';
-            case solid:
-                str += '--color--primary: 239,184,76;';
-            case color.length > 0:
-                str += `--color--text: ${parseColorString(color)};`
+            case accentColor.length > 0:
+                const accentColorStr = parseColorString(accentColor);
+                if (accentColorStr) {
+                    vals.push(genCssPropStr<buttonAccentKey>('--button-primary-border', accentColorStr)) // primary border color
+                    vals.push(genCssPropStr<buttonAccentKey>('--button-filled', accentColorStr)) // quiet bg color
+                    vals.push(genCssPropStr<buttonAccentKey>('--button-color', accentColorStr)) // solid bg color
+                }
+            case fontColor.length > 0:
+                const fontColorStr = parseColorString(fontColor);
+                if (fontColorStr) {
+                    vals.push(genCssPropStr<buttonFontKey>('--button-primary-text', fontColorStr)) // primary font color
+                    vals.push(genCssPropStr<buttonFontKey>('--button', fontColorStr)) // solid font color
+                }
         }
-        return str
-
-    }
-
-    const action = (node) => {
-        node.style.setProperty('--color--text', '244, 71, 8')
-        return {
-            destroy() {
-                console.log('buh bye')
-            }
+        // adjust scale
+        switch (size) {
+            case 'xs':
+                vals.push(genCssPropStr<buttonScaleKey>('--scale', '0.7'));
+                break;
+            case 's':
+                vals.push(genCssPropStr<buttonScaleKey>('--scale', '0.85'));
+                break;
+            case 'l':
+                vals.push(genCssPropStr<buttonScaleKey>('--scale', '1.25'));
+                break;
+            case 'xl':
+                vals.push(genCssPropStr<buttonScaleKey>('--scale', '1.6'));
+                break;
         }
+        return vals.join(';')
     }
 
 </script>
 
 <style type="text/scss">
-    @import '../_scss/variables/colors';
-    @import '../_scss/variables/measurements';
-
-
+    @import '../_scss/input';
 
     @font-face {
         font-family: 'Open Sans';
-        // src: url('./fonts/Open_Sans/OpenSans-Regular.ttf') format('truetype');
         src: url('fonts/Open_Sans/OpenSans-Regular.ttf') format('truetype');
         font-weight: 400;
     }
 
-
-    :root {
-        --color-bg: rgb(38,38,38);
-        --color--primary: #{$color-primary};
-    }  
-
-
-
-
-
-
     button {
-        // --color--text: var(--color--primary);
-        --color--text: var(--tabs-active);
-        --color--accent: var(--color--primary);
+        --scale: 1;
 
-        --height: #{$input-height};
-        --padding-x: #{$input-padding--x};
+        --height: calc(var(--scale) * #{$height});
 
-        --border-rad--std: #{$input-border-rad--std};
-        --border-rad--pill: #{$input-border-rad--pill};
+        --padding-x: calc(var(--scale) * #{$padding--x});
+
+        --border-rad--std: calc(var(--scale) * #{$border-rad--std});
+        --border-rad--pill: calc(var(--scale) * #{$border-rad--pill});
         --border-rad: var(--border-rad--std);
 
-        --border-width: #{$input-border--width};
-        --border-opacity--std: 0.65;
+        --border-width: #{$border--width};
 
-        --opacity--disabled: 0.45;
-        --opacity-accent: 0.65;
-        --opacity-accent--hover: .85;
-        --opacity-accent--active: 1.0;
-        --opacity--quiet: .15;
-        --opacity--quiet--hover: .45;
-        --opacity--quiet--active: .65;
+        // --opacity--disabled: 0.45;
+        // --opacity-accent: 0.75;
+        // --opacity-accent--hover: .88;
+        // --opacity-accent--active: 1.0;
+        // --opacity--quiet: .2;
+        // --opacity--quiet--hover: .45;
+        // --opacity--quiet--active: .65;
+        // --opacity-border: .7;
 
 
         font-family: 'Open Sans', sans-serif;
-        font-size: 0.8rem;
-        color: var(--button-color);
+        font-size: calc(var(--scale)* #{$font-size});
+        color: var(--button-primary-text);
         
         box-sizing: border-box;
         
-        background-color: var(--button);
+        background-color: transparent;
         padding: 0rem var(--padding-x);
         border: var(--border-width) solid transparent;
         border-radius: var(--border-rad);
@@ -133,19 +129,19 @@ disabled={disabled}
             left: calc(var(--border-width) * -1);
             position: absolute;
             top: calc(var(--border-width) * -1);
-            opacity: var(--opacity-accent);
+            opacity: $opacity-border;
             transition: opacity .23s cubic-bezier(.58,.19,.22,1);
             width: calc(100% + var(--border-width) * 2);
             z-index: -1;
         }
         &:hover::after {
-            opacity: var(--opacity-accent--hover);
+            opacity: $opacity-accent--hover;
         }
-        &:active::after {
-            opacity: var(--opacity-accent--active);
+        &:active::after, &.active::after {
+            opacity: $opacity-accent--active;
         }
         &:disabled {
-            opacity: var(--opacity--disabled);
+            opacity: $opacity--disabled;
             pointer-events: none;
             &::after {
                 box-shadow: none;
@@ -176,6 +172,7 @@ disabled={disabled}
         border-color: transparent;
         color: var(--button);
         &::after {
+            opacity: $opacity-accent;
             background-color: var(--button-color);
             border-color: transparent;
             box-shadow: none;
@@ -188,13 +185,13 @@ disabled={disabled}
             background-color: var(--button-filled);
             border-color: transparent;
             box-shadow: none;
-            opacity: var(--opacity--quiet);
+            opacity: $opacity--quiet;
         }
         &:hover::after {
-            opacity: var(--opacity--quiet--hover);
+            opacity: $opacity--quiet--hover;
         }
-        &:active::after {
-            opacity: var(--opacity--quiet--active);
+        &:active::after, &.active::after {
+            opacity: $opacity--quiet--active;
         }
 
     }
