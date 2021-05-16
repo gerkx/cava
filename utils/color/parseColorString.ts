@@ -4,8 +4,7 @@ export const parseColorString = (str: string): string|null => {
     let clr:Color|null = null;
     try {
         clr = Color(str);
-        return clr.rgb().array().join(',')
-
+        return clr.hex()
     }
     catch {
         if (str.includes(',')) {
@@ -40,7 +39,7 @@ export const parseColorString = (str: string): string|null => {
     }
     if (clr) {
         console.log(clr.rgb().string())
-        return clr.rgb().array().join(',')
+        return clr.hex()
     }
     return null
 }
