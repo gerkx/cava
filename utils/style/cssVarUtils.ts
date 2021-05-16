@@ -1,6 +1,3 @@
-import { cssInputVarKey } from './cssVars';
-
-export const setCssVarVal = (key:cssInputVarKey, val: string): string => {
-    return ''
-    
+export function genCssPropStr<Type>(key:Type, value:string):string {
+    return `${key}:${value}`
 }
