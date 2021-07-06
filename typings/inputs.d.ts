@@ -23,3 +23,9 @@ export type buttonSize = (
     null
 )
 
+export type buttonVariant = (
+    'action' |
+    'quiet' |
+    'solid' |
+    null
+)

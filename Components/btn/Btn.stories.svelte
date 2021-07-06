@@ -30,25 +30,15 @@
   title="Buttons/Button"
   component={Btn}
   argTypes={{
-    color: { control: 'text'}
-    // value: { control: "text"},
-    // uppercase: { control: "boolean" },
-    // block: { control: "boolean" },
+    variant: { control: 'text' },
+    size: { control: 'text' },
   }}
 />
 
 <Template let:args>
   <StoryWrapper>
     <div>
-      <Btn {...args} >
-      </Btn>
-      <Btn {...args} size='xs'>
-      </Btn>
-      <Btn {...args} size='s'>
-      </Btn>
-      <Btn {...args} size='l' >
-      </Btn>
-      <Btn {...args} size='xl' >
+      <Btn {...args}>
       </Btn>
 
     </div>

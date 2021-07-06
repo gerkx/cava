@@ -10,33 +10,58 @@ disabled={disabled}
 style={customCSSVars}
 >
     {value}
+    <!-- <div class='icon'>&#xF001;</div> -->
+    <div class='icon' />
 </button>
 
 <script lang="ts">
+    import { onMount } from 'svelte';
     import { parseColorString } from '../../utils/color/parseColorString';
-    import type { buttonAccentKey, buttonFontKey, buttonSize, buttonScaleKey} from '../../typings';
+    import type { 
+        buttonAccentKey, 
+        buttonFontKey, 
+        buttonScaleKey,
+        buttonSize, 
+        buttonVariant,
+    } from '../../typings';
     import { genCssPropStr } from '../../utils/style/cssVarUtils';
     
     ///////////
     // PROPS //
     ///////////
+    let _class:string= '';
+    export {_class as class}
+
     export let active:boolean = false;
     export let block:boolean = false;
     export let accentColor:string = '';
     export let fontColor:string = '';
     export let disabled:boolean = false;
     export let pill:boolean = false;
-    export let quiet:boolean = false;
-    export let solid:boolean = false;
+    export let size:buttonSize = null;
     export let uppercase:boolean = false;
     export let value:string = '' ;
-    export let size:buttonSize = null;
-    let _class:string= '';
-    export {_class as class}
+    export let variant:buttonVariant = null;
     
-    $: customCSSVars = setCustomVars();
+    let quiet:boolean = false;
+    let solid:boolean = false;
 
-    const setCustomVars = (): string => {
+
+    $: customCSSVars = setCustomCSSVars();
+    
+    onMount(() => {
+        console.log(variant)
+        switch (variant) {
+            case 'quiet':
+                quiet = true;
+                break;
+            case 'solid':
+                solid = true;
+                break;
+        }
+    })
+
+    const setCustomCSSVars = (): string => {
         let vals: string[] = [];
 
         // set custom colours
@@ -58,16 +83,16 @@ style={customCSSVars}
         // adjust scale
         switch (size) {
             case 'xs':
-                vals.push(genCssPropStr<buttonScaleKey>('--scale', '0.7'));
+                vals.push(genCssPropStr<buttonScaleKey>('--scale', '0.7')); // multipler for xs is 0.7
                 break;
             case 's':
-                vals.push(genCssPropStr<buttonScaleKey>('--scale', '0.85'));
+                vals.push(genCssPropStr<buttonScaleKey>('--scale', '0.85')); // multipler for s is 0.85
                 break;
             case 'l':
-                vals.push(genCssPropStr<buttonScaleKey>('--scale', '1.25'));
+                vals.push(genCssPropStr<buttonScaleKey>('--scale', '1.25')); // multipler for l is 1.25
                 break;
             case 'xl':
-                vals.push(genCssPropStr<buttonScaleKey>('--scale', '1.6'));
+                vals.push(genCssPropStr<buttonScaleKey>('--scale', '1.6')); // // multipler for xl is 1.6
                 break;
         }
         return vals.join(';')
@@ -84,6 +109,23 @@ style={customCSSVars}
         font-weight: 400;
     }
 
+    @font-face {
+        font-family: 'icono';
+        src: url('fonts/prueba.ttf') format('truetype');
+    }
+
+    .icon {
+        box-sizing: border-box;
+        font-family: 'icono';
+        font-size: 1.25em;
+        display: inline-block;
+        line-height: 1;
+        &::before {
+            content: '\F001';
+            box-sizing: inherit;
+        }
+    }
+
     button {
         --scale: 1;
 
@@ -94,25 +136,12 @@ style={customCSSVars}
         --border-rad--std: calc(var(--scale) * #{$border-rad--std});
         --border-rad--pill: calc(var(--scale) * #{$border-rad--pill});
         --border-rad: var(--border-rad--std);
-
         --border-width: #{$border--width};
-
-        // --opacity--disabled: 0.45;
-        // --opacity-accent: 0.75;
-        // --opacity-accent--hover: .88;
-        // --opacity-accent--active: 1.0;
-        // --opacity--quiet: .2;
-        // --opacity--quiet--hover: .45;
-        // --opacity--quiet--active: .65;
-        // --opacity-border: .7;
-
 
         font-family: 'Open Sans', sans-serif;
         font-size: calc(var(--scale)* #{$font-size});
         color: var(--button-primary-text);
-        
         box-sizing: border-box;
-        
         background-color: transparent;
         padding: 0rem var(--padding-x);
         border: var(--border-width) solid transparent;
@@ -120,6 +149,10 @@ style={customCSSVars}
         height: var(--height);
         position: relative;
         z-index: 1;
+        // line-height: 1.25;
+        display: flex;
+        align-items: center;
+        gap: .25em;
         &::after {
             content: '';
             border-radius: var(--border-rad);
