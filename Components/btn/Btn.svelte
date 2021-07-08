@@ -152,6 +152,7 @@ style={customCSSVars}
         // line-height: 1.25;
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: .25em;
         &::after {
             content: '';
