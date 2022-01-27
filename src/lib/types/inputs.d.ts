@@ -20,3 +20,12 @@ export interface buttonCSSProps extends baseCSSProps {
     fontSize?: string        
     gap?: string;
 }
+
+export type txtInputType = (
+    'email' |
+    'number' |
+    'search' |
+    'tel' |
+    'text' |
+    'url' 
+)

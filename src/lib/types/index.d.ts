@@ -5,6 +5,8 @@ declare global {
 }
 
 export * from './base';
+export * from './colors';
 export * from './inputs'
 export * from './panel';
+export * from './svg';
 export * from './starlette';
