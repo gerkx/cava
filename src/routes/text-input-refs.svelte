@@ -39,6 +39,10 @@
             label='with a placeholder'
             placeholder='beep bop boop'
         />
+        <TextInput 
+            label='invalid'
+            invalid
+        />
     </div>
 </Panel>
 

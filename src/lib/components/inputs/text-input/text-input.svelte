@@ -5,6 +5,7 @@
     export let label:string|null = null;
     export let placeholder:string|null = null;
     export let type:txtInputType = 'text';
+    export let invalid:boolean = false;
 
     const id = nanoid();
     
@@ -19,8 +20,8 @@
         id={id}
         placeholder={placeholder}
         type={type}
+        class:invalid
     >
-
 </div>
 
 
@@ -63,6 +64,9 @@
         outline: none;
         &:focus {
             border-color: var(--blue-600);
+        }
+        &.invalid {
+            border-color: var(--red-500);
         }
     }
     label {
