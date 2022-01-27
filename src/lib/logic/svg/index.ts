@@ -1,2 +1,2 @@
 export * from './parse-svg';
-export * from './svg-to-icon'
+export * from './svg-to-icon';
