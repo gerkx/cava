@@ -1,12 +1,4 @@
-import type { spectrumColors, brightnessThemes } from '$lib/types'
-
-type theme = {
-    [key in spectrumColors]: string
-}
-
-type brightnessTheme = {
-    [key in brightnessThemes]: theme
-}
+import type { brightnessTheme } from '$lib/types';
 
 export const colorThemes: brightnessTheme = {
     'lightest': {

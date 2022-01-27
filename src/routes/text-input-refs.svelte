@@ -4,7 +4,13 @@
     import TextInput from '$lib/components/inputs/text-input/text-input.svelte'
     import ToggleGroup from '$lib/components/inputs/btn/toggle-group.svelte';
     import ToggleBtn from '$lib/components/inputs/btn/toggle-btn.svelte';
-    import type { panelCSSProps, starletteProps} from '$lib/types'
+    import type { panelCSSProps, starletteProps, webTheme} from '$lib/types';
+
+    const manualTheme:webTheme = {
+        appName:'AEFT',
+        theme:'gradient',
+        gradientvalue: 0
+    }
     const cssProps:panelCSSProps = {
         // paddingY: '3.5em',
         // width: '20%',

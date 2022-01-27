@@ -62,7 +62,7 @@
         border-radius: var(--calc-border-rad);
         outline: none;
         &:focus {
-            border-color: orange;
+            border-color: var(--blue-600);
         }
     }
     label {

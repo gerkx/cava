@@ -1,8 +1,9 @@
 <script lang='ts'>
     import { onMount } from 'svelte';
     import starlette from 'starlette';
-    import { setCSSProps } from '$lib/logic/style'
+    import { deriveBrowserTheme, setAdobeThemedColorProps, setCSSProps } from '$lib/logic/style'
     import type { panelCSSProps ,starletteProps, webTheme } from '$lib/types';
+    import { colorThemes } from '$lib/logic/style/colorThemes';
 
     let _class:string= '';
     export { _class as class }
@@ -22,13 +23,21 @@
     onMount (() => {
         if (window.__adobe_cep__ && !webTheme) {
             starlette.init();
+            setAdobeThemedColorProps(document.documentElement, colorThemes)
+        }
+        else if (webTheme){
+            starlette.initAs(webTheme.appName, webTheme.theme, webTheme.gradientvalue);
+            setAdobeThemedColorProps(document.documentElement, colorThemes)
         }
         else {
-            webTheme = webTheme
-                ? webTheme
-                : { appName: 'AEFT', theme: 'gradient', gradientvalue: 0}
-
-            starlette.initAs(webTheme.appName, webTheme.theme, webTheme.gradientvalue);
+            const browserTheme = deriveBrowserTheme();
+            starlette.initAs('ILST', browserTheme);
+            setAdobeThemedColorProps(document.documentElement, colorThemes)
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                const newColorScheme = event.matches ? "darkest" : "lightest";
+                starlette.initAs('ILST', newColorScheme);
+                setAdobeThemedColorProps(document.documentElement, colorThemes)
+            });
         }
     })
 
@@ -36,7 +45,7 @@
 
 <div 
     class={_class}
-    use:setCSSProps={comboCSSProps} 
+    use:setCSSProps={comboCSSProps}
     id='panel'
 >
     <slot />
