@@ -10,6 +10,7 @@
     import Visibility from '$lib/components/icons/Visibility.svelte';
     import VisibilityOff from '$lib/components/icons/VisibilityOff.svelte';
 
+
     const manualTheme:webTheme = {
         appName:'AEFT',
         theme:'gradient',
@@ -45,8 +46,8 @@
         />
         <TextInput 
             type='password'
-            label='supplied value'
-            value='yadda yadda'
+            label='password input'
+            value='pa$$w0rd'
         />
         <TextInput 
         label='with a placeholder'
@@ -55,6 +56,19 @@
         <TextInput 
         label='clearable text input'
         clearable
+        value='buh bye'
+        />
+        <TextInput 
+        label='custom accentColor'
+        accentColor='orange'
+        />
+        <TextInput 
+        label='custom focusColor'
+        focusColor='orange'
+        />
+        <TextInput 
+        label='custom fontColor'
+        fontColor='orange'
         />
         <TextInput label='appendInner Slot'>
             <Promote slot='appendInner' />

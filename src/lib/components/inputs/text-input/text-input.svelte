@@ -1,35 +1,61 @@
 <script lang='ts'>
-    import type { txtInputType } from '$lib/types';
-    import { nanoid } from 'nanoid'
-    import Btn from '$lib/components/inputs/btn/btn.svelte';
+    import type { panelCSSProps, starletteProps, txtInputType } from '$lib/types';
+    import { nanoid } from 'nanoid';
+    import { setCSSProps } from '$lib/logic/style'
 
+    import Btn from '$lib/components/inputs/btn/btn.svelte';
     import Close from '$lib/components/icons/Close.svelte';
     import Alert from '$lib/components/icons/Alert.svelte';
     import Visibility from '$lib/components/icons/Visibility.svelte';
     import VisibilityOff from '$lib/components/icons/VisibilityOff.svelte'
 
+    export let accentColor:string|null = null;
     export let clearable:boolean = false;
+    export let cssProps: panelCSSProps = {};
+    export let focusColor:string|null = null;
+    export let fontColor:string|null = null;
     export let invalid:boolean = false;
     export let label:string|null = null;
     export let message:string|null = null;
     export let placeholder:string|null = null;
+    export let starletteCSSProps: starletteProps = {};
     export let type:txtInputType = 'text';
-    export let value:string = ''
+    export let value:string = '';
 
     const id = nanoid();
-
     let focus:boolean = false;
+    let passwordVisible:boolean = false;
+    let reactiveType:txtInputType = type;
+    let comboCSSProps = {...starletteCSSProps, ...cssProps};
+    if (accentColor) comboCSSProps = {...comboCSSProps, ...{colorDefault: accentColor}};
+    if (focusColor) comboCSSProps = {...comboCSSProps, ...{focusColor: focusColor}};
+    if (fontColor) comboCSSProps = {...comboCSSProps, ...{buttonPrimaryText: fontColor}};
 
-    const toggleFocus = () => {
-        focus = !focus;
+    const toggleFocus = () => focus = !focus;
+    const togglePasswordVisibility = () => passwordVisible = !passwordVisible;
+    const clearValue = () => value = '';
+
+    // https://stackoverflow.com/questions/57392773/error-type-attribute-cannot-be-dynamic-if-input-uses-two-way-binding
+    const handleInput = e => {
+        value = type.match(/^(number|range)$/)
+            ? +e.target.value
+            : e.target.value;
+    };
+    
+    $: {
+        if (type === 'password') {
+            if (passwordVisible) {
+                reactiveType = 'text';
+            }
+            else {
+                reactiveType = 'password'
+            }
+        }
     }
     
-    let root:HTMLElement;
-    let passwordVisible:boolean = false;
-    const togglePasswordVisibility = () => passwordVisible = !passwordVisible
 </script>
 
-<div bind:this={root} >
+<div >
     {#if label && label.length > 0}
     <label for={id} >{label}</label>
     {/if}
@@ -38,7 +64,7 @@
         {#if $$slots.prepend}
             <div class='append'><slot name='prepend' /></div>
         {/if}
-        <div class='input-content' class:focus class:invalid>
+        <div class='input-content' class:focus class:invalid use:setCSSProps={comboCSSProps}>
             {#if $$slots.prependInner}
                 <slot name='prependInner' />
             {/if}
@@ -46,15 +72,15 @@
                 name={label}
                 id={id}
                 placeholder={placeholder}
-                type={type}
+                type={reactiveType}
                 value={value}
-        
+                on:input={handleInput}
                 on:focus={toggleFocus}
                 on:blur={toggleFocus}
             >
             {#if clearable || type === 'password' || $$slots.appendInner}
                 <div class='append-inner'>
-                    {#if clearable}<Btn variant='silent'> <Close /> </Btn> {/if}
+                    {#if clearable}<Btn variant='silent' on:click={clearValue}> <Close /> </Btn> {/if}
                     {#if type === 'password'} 
                         <Btn variant='silent' on:click={togglePasswordVisibility}>
                             {#if passwordVisible}
@@ -97,6 +123,7 @@
         --calc-height: calc(var(--scale) * var(--input-height));
         --calc-padding-x: calc(var(--scale) * var(--padding-x));
         --calc-padding-y: calc(var(--scale) * var(--padding-y));
+        --focus-color: var(--primary);
     }
 
     input:not([type=submit]):not([type=file]) {
@@ -129,7 +156,7 @@
             border-color: var(--error);
         }   
         &.focus:not(.invalid) {
-            border-color: var(--primary);
+            border-color: var(--focus-color);
         }
     }
 
