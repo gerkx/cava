@@ -5,6 +5,10 @@
     import ToggleGroup from '$lib/components/inputs/btn/toggle-group.svelte';
     import ToggleBtn from '$lib/components/inputs/btn/toggle-btn.svelte';
     import type { panelCSSProps, starletteProps, webTheme} from '$lib/types';
+    import Promote from '$lib/components/icons/Promote.svelte';
+    import User from '$lib/components/icons/User.svelte';
+    import Visibility from '$lib/components/icons/Visibility.svelte';
+    import VisibilityOff from '$lib/components/icons/VisibilityOff.svelte';
 
     const manualTheme:webTheme = {
         appName:'AEFT',
@@ -34,16 +38,59 @@
     <div class='section'>
         <TextInput 
             label='standard text input'
-            clearable
         />
         <TextInput 
-            label='with a placeholder'
-            placeholder='beep bop boop'
+            label='supplied value'
+            value='yadda yadda'
         />
         <TextInput 
-            label='invalid'
+            type='password'
+            label='supplied value'
+            value='yadda yadda'
+        />
+        <TextInput 
+        label='with a placeholder'
+        placeholder='beep bop boop'
+        />
+        <TextInput 
+        label='clearable text input'
+        clearable
+        />
+        <TextInput label='appendInner Slot'>
+            <Promote slot='appendInner' />
+        </TextInput>
+        <TextInput label='appendInner Slot & clearable' clearable>
+            <Promote slot='appendInner' />
+        </TextInput>
+        <TextInput label='prependInner Slot'>
+            <User slot='prependInner' />
+        </TextInput>
+        <TextInput label='prependInner & appendInner Slots'>
+            <User slot='prependInner' />
+            <Promote slot='appendInner' />
+        </TextInput>
+        <TextInput label='prepend Slot'>
+            <User slot='prepend' />
+        </TextInput>
+        <TextInput label='append Slot'>
+            <Promote slot='append' />
+        </TextInput>
+        <TextInput 
+            label='with a message'
+            message='sample message text'
+        />
+        <TextInput 
             invalid
+            label='invalid'
+            message='invalid input message'
         />
+        <TextInput 
+            invalid
+            label='invalid with append slot'
+            message='invalid input message'
+        >
+            <Promote slot='append'/>
+        </TextInput>
     </div>
 </Panel>
 

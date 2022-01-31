@@ -1,19 +1,20 @@
 <script lang='ts'>
-    import { onMount } from 'svelte';
     import type { txtInputType } from '$lib/types';
     import { nanoid } from 'nanoid'
+    import Btn from '$lib/components/inputs/btn/btn.svelte';
 
+    import Close from '$lib/components/icons/Close.svelte';
+    import Alert from '$lib/components/icons/Alert.svelte';
+    import Visibility from '$lib/components/icons/Visibility.svelte';
+    import VisibilityOff from '$lib/components/icons/VisibilityOff.svelte'
+
+    export let clearable:boolean = false;
+    export let invalid:boolean = false;
     export let label:string|null = null;
+    export let message:string|null = null;
     export let placeholder:string|null = null;
     export let type:txtInputType = 'text';
-    export let invalid:boolean = false;
-    export let clearable:boolean = false;
-    
-
-    import Bell from '$lib/components/icons/Bell.svelte'
-    import Close from '$lib/components/icons/Close.svelte'
-    import Alert from '$lib/components/icons/Alert.svelte'
-    import Btn from '$lib/components/inputs/btn/btn.svelte';
+    export let value:string = ''
 
     const id = nanoid();
 
@@ -24,8 +25,8 @@
     }
     
     let root:HTMLElement;
-    let red: 'red'
-    
+    let passwordVisible:boolean = false;
+    const togglePasswordVisibility = () => passwordVisible = !passwordVisible
 </script>
 
 <div bind:this={root} >
@@ -34,27 +35,48 @@
     {/if}
     
     <div class='input-wrapper'>
+        {#if $$slots.prepend}
+            <div class='append'><slot name='prepend' /></div>
+        {/if}
         <div class='input-content' class:focus class:invalid>
-            <Bell />
+            {#if $$slots.prependInner}
+                <slot name='prependInner' />
+            {/if}
             <input
                 name={label}
                 id={id}
                 placeholder={placeholder}
                 type={type}
+                value={value}
         
                 on:focus={toggleFocus}
                 on:blur={toggleFocus}
             >
-            {#if clearable}<Btn variant='silent'> <Close /> </Btn> {/if}
+            {#if clearable || type === 'password' || $$slots.appendInner}
+                <div class='append-inner'>
+                    {#if clearable}<Btn variant='silent'> <Close /> </Btn> {/if}
+                    {#if type === 'password'} 
+                        <Btn variant='silent' on:click={togglePasswordVisibility}>
+                            {#if passwordVisible}
+                                <VisibilityOff size='l'/> 
+                            {:else}
+                                <Visibility size='l'/> 
+                            {/if}
+                        </Btn>
+                    {/if}
+                    <slot name='appendInner' />
+                </div>
+            {/if}
         </div>
-        {#if invalid}
-            <span class='alert'>
-                <Alert size='l' />
-            </span>
+        {#if invalid || $$slots.append }
+            <slot name='append' />
+            {#if invalid}<span class='alert'><Alert size='l' /></span>{/if}
         {/if}
+        {#if message && message.length > 1}
         <div class='message' class:invalid>
-            message
+            {message}
         </div>
+        {/if}
     </div>
 </div>
 
@@ -78,7 +100,6 @@
     }
 
     input:not([type=submit]):not([type=file]) {
-        // properties
         font-family: 'Open Sans', sans-serif;
         font-size: var(--calc-font-size);
         color: var(--button-primary-text);
@@ -87,21 +108,8 @@
         display: block;
         width: var(--width);
         height: var(--calc-height);
-
-        // padding-top: var(--calc-padding-y);
-        // padding-bottom: var(--calc-padding-y);
-        // padding-left: var(--calc-padding-x);
-        // padding-right: var(--calc-padding-x);
-
         border: var(--border-width) solid transparent;
-        // border-radius: var(--calc-border-rad);
         outline: none;
-        // &:focus {
-        //     border-color: var(--blue-600);
-        // }
-        // &.invalid {
-        //     border-color: var(--red-500);
-        // }
     }
     label {
         display: block;
@@ -118,10 +126,10 @@
         padding-left: var(--calc-padding-x);
         padding-right: var(--calc-padding-x);
         &.invalid {
-            border-color: var(--red-500);
+            border-color: var(--error);
         }   
         &.focus:not(.invalid) {
-            border-color: var(--blue-500);
+            border-color: var(--primary);
         }
     }
 
@@ -133,7 +141,7 @@
     }
 
     .alert {
-        color: var(--red-500);
+        color: var(--error);
         height: var(--input-height);
         display: flex;
         flex-direction: column;
@@ -148,6 +156,17 @@
         &.invalid {
             color: var(--error);
         }
+    }
+
+    .append-inner {
+        display: flex;
+        align-items: center;
+    }
+
+    .append {
+        height: var(--input-height);
+        display: flex;
+        align-items: center;
     }
 
 </style>
