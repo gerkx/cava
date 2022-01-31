@@ -34,6 +34,7 @@
     <div class='section'>
         <TextInput 
             label='standard text input'
+            clearable
         />
         <TextInput 
             label='with a placeholder'

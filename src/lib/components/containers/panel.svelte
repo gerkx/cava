@@ -1,7 +1,7 @@
 <script lang='ts'>
     import { onMount } from 'svelte';
     import starlette from 'starlette';
-    import { deriveBrowserTheme, setAdobeThemedColorProps, setCSSProps } from '$lib/logic/style'
+    import { deriveBrowserTheme, setAdobeThemedColorProps, setCSSProps, setKeywordColorProps } from '$lib/logic/style'
     import type { panelCSSProps ,starletteProps, webTheme } from '$lib/types';
     import { colorThemes } from '$lib/logic/style/colorThemes';
 
@@ -24,19 +24,26 @@
         if (window.__adobe_cep__ && !webTheme) {
             starlette.init();
             setAdobeThemedColorProps(document.documentElement, colorThemes)
+            window.__adobe_cep__.addEventListener(
+                "com.adobe.csxs.events.ThemeColorChanged",
+                setKeywordColorProps
+            );
         }
         else if (webTheme){
             starlette.initAs(webTheme.appName, webTheme.theme, webTheme.gradientvalue);
-            setAdobeThemedColorProps(document.documentElement, colorThemes)
+            setAdobeThemedColorProps(document.documentElement, colorThemes);
+            setKeywordColorProps();
         }
         else {
             const browserTheme = deriveBrowserTheme();
             starlette.initAs('ILST', browserTheme);
             setAdobeThemedColorProps(document.documentElement, colorThemes)
+            setKeywordColorProps();
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
                 const newColorScheme = event.matches ? "darkest" : "lightest";
                 starlette.initAs('ILST', newColorScheme);
-                setAdobeThemedColorProps(document.documentElement, colorThemes)
+                setAdobeThemedColorProps(document.documentElement, colorThemes);
+                setKeywordColorProps();
             });
         }
     })
@@ -94,6 +101,8 @@
         --opacity-accent--hover: .93;
         --opacity-accent--active: 1.0;
         --opacity-border: .7;
+
+
 
         // // scalars
         // --input-scale-xs: 0.70;

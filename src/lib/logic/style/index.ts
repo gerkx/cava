@@ -64,3 +64,14 @@ export const deriveBrowserTheme = (): brightnessThemeNames => {
     }
     return themeName
 }
+
+export const setKeywordColorProps = () => {
+    const blue = getComputedStyle(document.documentElement).getPropertyValue('--blue-500');
+    const green = getComputedStyle(document.documentElement).getPropertyValue('--green-500');
+    const orange = getComputedStyle(document.documentElement).getPropertyValue('--orange-500');
+    const red = getComputedStyle(document.documentElement).getPropertyValue('--red-500');
+    document.documentElement.style.setProperty(`--error`, red);
+    document.documentElement.style.setProperty(`--warning`, orange);
+    document.documentElement.style.setProperty(`--success`, green);
+    document.documentElement.style.setProperty(`--primary`, blue);
+}

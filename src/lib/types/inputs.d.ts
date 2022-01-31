@@ -24,6 +24,7 @@ export interface buttonCSSProps extends baseCSSProps {
 export type txtInputType = (
     'email' |
     'number' |
+    'password' |
     'search' |
     'tel' |
     'text' |
