@@ -94,6 +94,7 @@
         --opacity-quiet: .2;
         --opacity-quiet--hover: .45;
         --opacity-quiet--active: .65;
+        --opacity-quiet--focus: .65;
         --opacity-silent: 0.0;
         --opacity-silent--hover: 0.15;
         --opacity-silent--active: 0.25;

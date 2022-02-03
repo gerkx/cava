@@ -60,7 +60,7 @@
         />
         <TextInput 
         label='custom accentColor'
-        accentColor='orange'
+        accentColor='#6fde14'
         />
         <TextInput 
         label='custom focusColor'
@@ -106,6 +106,26 @@
             <Promote slot='append'/>
         </TextInput>
     </div>
+    <div class='section'>
+        <TextInput label='quiet variant' variant='quiet' />
+        <TextInput label='quiet w/ appendInner' variant='quiet'>
+            <Promote slot='appendInner' />
+        </TextInput>
+        <TextInput label='quiet w/ append' variant='quiet' clearable>
+            <Promote slot='append' />
+        </TextInput>
+        <TextInput label='quiet invalid' variant='quiet' invalid/>
+        <TextInput 
+        label='quiet custom accentColor' 
+        variant='quiet' 
+        accentColor='orange'
+        />
+        <TextInput 
+        label='quiet custom focusColor' 
+        variant='quiet' 
+        focusColor='pink'
+        />
+    </div>
 </Panel>
 
 <style type='text/scss'>
@@ -116,7 +136,7 @@
         flex-wrap: wrap;
         align-items: center;
         &:not(:first-child  ){
-            padding-top: .5em;
+            padding-top: 2.5em;
         }
     }
 </style>
