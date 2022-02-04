@@ -3,17 +3,20 @@
 	import { nanoid } from 'nanoid';
 	import { setCSSProps } from '$lib/logic/style';
 
+    // Icon imports
 	import Btn from '$lib/components/inputs/btn/btn.svelte';
 	import Close from '$lib/components/icons/Close.svelte';
 	import Alert from '$lib/components/icons/Alert.svelte';
 	import Visibility from '$lib/components/icons/Visibility.svelte';
 	import VisibilityOff from '$lib/components/icons/VisibilityOff.svelte';
 
+    // Props
 	export let accentColor: string | null = null;
 	export let clearable: boolean = false;
 	export let cssProps: panelCSSProps = {};
 	export let focusColor: string | null = null;
 	export let fontColor: string | null = null;
+	export let id:string = nanoid();
 	export let invalid: boolean = false;
 	export let label: string | null = null;
 	export let message: string | null = null;
@@ -23,25 +26,29 @@
 	export let value: string = '';
 	export let variant: buttonVariant = null;
 
-	const id = nanoid();
-	let focus: boolean = false;
-	let passwordVisible: boolean = false;
-	let reactiveType: txtInputType = type;
-    let inputElement:HTMLInputElement;
 	let comboCSSProps = { ...starletteCSSProps, ...cssProps };
-	if (accentColor) comboCSSProps = { ...comboCSSProps, ...{ colorDefault: accentColor } };
-	if (focusColor) comboCSSProps = { ...comboCSSProps, ...{ focusColor: focusColor, quietFocusColor: focusColor} };
+	let focus: boolean = false;
+	let inputElement: HTMLInputElement;
+	let passwordVisible: boolean = false;
+    let quiet: boolean = false;
+	let silent: boolean = false;
+	let solid: boolean = false;
+	
+    if (accentColor) comboCSSProps = { ...comboCSSProps, ...{ colorDefault: accentColor } };
+	if (focusColor)
+		comboCSSProps = {
+			...comboCSSProps,
+			...{ focusColor: focusColor, quietFocusColor: focusColor }
+		};
 	if (fontColor) comboCSSProps = { ...comboCSSProps, ...{ buttonPrimaryText: fontColor } };
 
 	const toggleFocus = () => (focus = !focus);
 	const togglePasswordVisibility = () => (passwordVisible = !passwordVisible);
-	const clearValue = () => {
-        value = '';
-        inputElement.focus();
-    }
+	const clearValue = () => { value = ''; inputElement.focus(); };
 
 	// https://stackoverflow.com/questions/57392773/error-type-attribute-cannot-be-dynamic-if-input-uses-two-way-binding
-	const handleInput = (e) => {
+	let reactiveType: txtInputType = type;
+    const handleInput = (e) => {
 		value = type.match(/^(number|range)$/) ? +e.target.value : e.target.value;
 	};
 
@@ -55,9 +62,6 @@
 		}
 	}
 
-	let quiet: boolean = false;
-	let silent: boolean = false;
-	let solid: boolean = false;
 	$: {
 		switch (variant) {
 			case 'quiet':
@@ -109,17 +113,25 @@
 				type={reactiveType}
 				{value}
 				class:quiet
-                class:invalid
-                bind:this={inputElement}
+				class:invalid
+				bind:this={inputElement}
 				on:input={handleInput}
 				on:focus={toggleFocus}
 				on:blur={toggleFocus}
 			/>
 			{#if clearable || type === 'password' || $$slots.appendInner}
 				<div class="append-inner">
-					{#if clearable}<Btn variant="silent" on:click={clearValue}><Close /></Btn> {/if}
+					{#if clearable}
+                        <Btn 
+                            variant="silent" 
+                            fontColor="currentColor" 
+                            on:click={clearValue}
+                            >
+                            <Close />
+                        </Btn>
+					{/if}
 					{#if type === 'password'}
-						<Btn variant="silent" on:click={togglePasswordVisibility}>
+						<Btn variant="silent" disabled={value.length < 1} on:click={togglePasswordVisibility}>
 							{#if passwordVisible}
 								<VisibilityOff size="l" />
 							{:else}
@@ -159,7 +171,7 @@
 		--calc-padding-x: calc(var(--scale) * var(--padding-x));
 		--calc-padding-y: calc(var(--scale) * var(--padding-y));
 		--focus-color: var(--primary);
-        --quiet-focus-color: var(--color-default);
+		--quiet-focus-color: var(--color-default);
 	}
 
 	input:not([type='submit']):not([type='file']) {
@@ -174,11 +186,12 @@
 		border: var(--border-width) solid transparent;
 		outline: none;
 		&.quiet:focus:not(.invalid) {
-			color: var(--color-btn-active);
+			// color: var(--color-btn-active);
+			color: var(--color-dropdown-hover);
 		}
-        &.quiet:focus.invalid {
-            color: var(--tooltip-color);
-        }
+		&.quiet:focus.invalid {
+			color: var(--tooltip-color);
+		}
 	}
 	label {
 		display: block;
@@ -195,45 +208,49 @@
 		padding-left: var(--calc-padding-x);
 		padding-right: var(--calc-padding-x);
 		&.invalid {
-            border-color: var(--error);
+			border-color: var(--error);
 		}
 		&.focus:not(.invalid) {
-            border-color: var(--focus-color);
+			border-color: var(--focus-color);
 		}
-        &.quiet {
-            z-index: 0;
-            border-color: transparent;
-            position: relative;
-            &.focus:not(.invalid) {
-                border-color: transparent;
-            }
-            &::after {
-                content: '';
-                box-sizing: border-box;
-                background-color: var(--color-default);
-                box-shadow: none;
-                opacity: var(--opacity-quiet);
-                position: absolute;
-                left: calc(var(--border-width) * -1);
-                top: calc(var(--border-width) * -1);
-                bottom: calc(var(--border-width) * -1);
-                right: calc(var(--border-width) * -1);
-                z-index: -2;
-                border-radius: var(--calc-border-rad);
-                transition: opacity 0.25s cubic-bezier(0.58, 0.19, 0.22, 1);
-            }
-            &.focus {
-                color: var(--color-btn-active);
-            }
-            &.focus::after,
-            &:focus::after {
-                opacity: var(--opacity-quiet--focus);
-                background-color: var(--quiet-focus-color);
-            }
-            &.invalid::after {
-                background-color: var(--error);
-            }
-        }
+		&.quiet {
+			z-index: 0;
+			border-color: transparent;
+			position: relative;
+			&.focus:not(.invalid) {
+				border-color: transparent;
+			}
+			&::after {
+				content: '';
+				box-sizing: border-box;
+				background-color: var(--color-default);
+				box-shadow: none;
+				opacity: var(--opacity-quiet);
+				position: absolute;
+				left: calc(var(--border-width) * -1);
+				top: calc(var(--border-width) * -1);
+				bottom: calc(var(--border-width) * -1);
+				right: calc(var(--border-width) * -1);
+				z-index: -2;
+				border-radius: var(--calc-border-rad);
+				transition: opacity 0.22s cubic-bezier(0.58, 0.19, 0.22, 1);
+			}
+			&.focus {
+				color: var(--color-btn-active);
+			}
+			&.focus::after,
+			&:focus::after {
+				opacity: var(--opacity-quiet--focus);
+				background-color: var(--quiet-focus-color);
+			}
+			&.invalid::after {
+				background-color: var(--error);
+				opacity: calc(var(--opacity-quiet) * 2);
+			}
+			&.invalid.focus::after {
+				opacity: var(--opacity-quiet--focus);
+			}
+		}
 	}
 
 	.input-wrapper {
