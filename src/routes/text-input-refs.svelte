@@ -105,6 +105,10 @@
         >
             <Promote slot='append'/>
         </TextInput>
+        <TextInput 
+            label='disabled standard'
+            disabled
+        />
     </div>
     <div class='section'>
         <TextInput label='quiet variant' variant='quiet' />
@@ -151,6 +155,12 @@
             variant='quiet' 
             fontColor='#88fc03'
         />
+        <TextInput 
+            label='disabled quiet'
+            variant='quiet'
+            value='disabled'
+            disabled
+        />
     </div>
     <div class="section">
         <TextInput label='silent variant' variant='silent' />
@@ -192,6 +202,11 @@
             label='silent custom fontColor' 
             variant='silent' 
             fontColor='#88fc03'
+        />
+        <TextInput 
+            label='disabled silent'
+            variant='silent'
+            disabled
         />
     </div>
 </Panel>

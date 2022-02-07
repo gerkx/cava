@@ -90,7 +90,8 @@
         --padding-y: 0;
 
         // opacities
-        --opacity--disabled: 0.45;
+        --opacity--disabled: 0.4;
+        --opacity--disabled--text: 0.3;
         --opacity-quiet: .2;
         --opacity-quiet--hover: .45;
         --opacity-quiet--active: .65;

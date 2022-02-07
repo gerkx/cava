@@ -14,6 +14,7 @@
 	export let accentColor: string | null = null;
 	export let clearable: boolean = false;
 	export let cssProps: panelCSSProps = {};
+	export let disabled: boolean = false;
 	export let focusColor: string | null = null;
 	export let fontColor: string | null = null;
 	export let id:string = nanoid();
@@ -81,10 +82,10 @@
 
 <div>
 	{#if label && label.length > 0}
-		<label for={id}>{label}</label>
+		<label for={id} class:disabled>{label}</label>
 	{/if}
 
-	<div class="input-wrapper">
+	<div class="input-wrapper" class:disabled>
 		{#if $$slots.prepend}
 			<div class="append"><slot name="prepend" /></div>
 		{/if}
@@ -100,13 +101,14 @@
 				<slot name="prependInner" />
 			{/if}
 			<input
-				name={label}
+				class:quiet
+				class:invalid
+				{disabled}
 				{id}
+				name={label}
 				{placeholder}
 				type={reactiveType}
 				{value}
-				class:quiet
-				class:invalid
 				bind:this={inputElement}
 				on:input={handleInput}
 				on:focus={toggleFocus}
@@ -185,7 +187,6 @@
 		border: var(--border-width) solid transparent;
 		outline: none;
 		&.quiet:focus:not(.invalid) {
-			// color: var(--color-btn-active);
 			color: var(--color-dropdown-hover);
 		}
 		&.quiet:focus.invalid {
@@ -195,6 +196,9 @@
 	label {
 		display: block;
 		padding-left: var(--calc-padding-x);
+		&.disabled {
+			opacity: var(--opacity--disabled);
+		}
 	}
 
 	.input-content {
@@ -209,6 +213,9 @@
 		&.invalid {
 			border-color: var(--error);
 		}
+		// &.disabled {
+		// 	opacity: var(--opacity--disabled--text);
+		// }
 		&.focus:not(.invalid) {
 			border-color: var(--focus-color);
 		}
@@ -279,7 +286,6 @@
 				border-bottom-color: var(--error);
 			}
 		}
-
 	}
 
 	.input-wrapper {
@@ -287,6 +293,9 @@
 		align-items: center;
 		gap: 0.5em;
 		position: relative;
+		&.disabled {
+			opacity: var(--opacity--disabled--text);
+		}
 	}
 
 	.alert {
