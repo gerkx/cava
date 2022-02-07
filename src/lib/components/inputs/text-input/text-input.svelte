@@ -67,20 +67,12 @@
 			case 'quiet':
 				quiet = true;
 				silent = false;
-				solid = false;
 				break;
 			case 'silent':
 				quiet = false;
 				silent = true;
-				solid = false;
-				break;
-			case 'solid':
-				quiet = false;
-				silent = false;
-				solid = true;
 				break;
 			default:
-				solid = false;
 				quiet = false;
 				silent = false;
 		}
@@ -101,6 +93,7 @@
 			class:focus
 			class:invalid
 			class:quiet
+            class:silent
 			use:setCSSProps={comboCSSProps}
 		>
 			{#if $$slots.prependInner}
@@ -124,14 +117,20 @@
 					{#if clearable}
                         <Btn 
                             variant="silent" 
-                            fontColor="currentColor" 
+                            fontColor="currentColor"
+							tabindex={-1}
                             on:click={clearValue}
                             >
                             <Close />
                         </Btn>
 					{/if}
 					{#if type === 'password'}
-						<Btn variant="silent" disabled={value.length < 1} on:click={togglePasswordVisibility}>
+						<Btn 
+                            fontColor="currentColor"
+                            variant="silent" 
+                            disabled={value.length < 1} 
+                            on:click={togglePasswordVisibility}
+                        >
 							{#if passwordVisible}
 								<VisibilityOff size="l" />
 							{:else}
@@ -251,6 +250,36 @@
 				opacity: var(--opacity-quiet--focus);
 			}
 		}
+        &.silent {
+			border-color: transparent;
+            border-radius: 0;
+			position: relative;
+			&::after {
+				content: '';
+				border-bottom: var(--border-width) solid var(--color-default);
+				box-sizing: border-box;
+				box-shadow: none;
+				position: absolute;
+				width: calc(100% + calc(var(--border-width) * 1));
+				height: calc(100% + calc(var(--border-width) * 1));
+				left: 0;
+				bottom: 0;
+				z-index: -1;
+			}
+        }
+        &.focus:not(.invalid){
+			border-color: transparent;
+			&::after {
+				border-color: transparent;
+				border-bottom-color: var(--focus-color);
+			}
+		}
+		&.invalid {
+			&::after {
+				border-bottom-color: var(--error);
+			}
+		}
+
 	}
 
 	.input-wrapper {

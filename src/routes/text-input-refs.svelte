@@ -108,22 +108,90 @@
     </div>
     <div class='section'>
         <TextInput label='quiet variant' variant='quiet' />
+        <TextInput 
+            value='value'
+            label='quiet supplied value' 
+            variant='quiet' 
+        />
+        <TextInput 
+            type='password'
+            value='pa$$w0rd'
+            label='quiet password' 
+            variant='quiet' 
+        />
+        <TextInput 
+            placeholder='quiet placeholder'
+            label='quiet placeholder' 
+            variant='quiet' 
+        />
         <TextInput label='quiet w/ appendInner' variant='quiet'>
             <Promote slot='appendInner' />
         </TextInput>
         <TextInput label='quiet w/ append' variant='quiet' clearable>
             <Promote slot='append' />
         </TextInput>
-        <TextInput label='quiet invalid' variant='quiet' invalid/>
         <TextInput 
-        label='quiet custom accentColor' 
-        variant='quiet' 
-        accentColor='orange'
+            label='quiet invalid' 
+            variant='quiet'  
+            invalid
+            message='invalid input message'
         />
         <TextInput 
-        label='quiet custom focusColor' 
-        variant='quiet' 
-        focusColor='pink'
+            label='quiet custom accentColor' 
+            variant='quiet' 
+            accentColor='orange'
+        />
+        <TextInput 
+            label='quiet custom focusColor' 
+            variant='quiet' 
+            focusColor='pink'
+        />
+        <TextInput 
+            label='quiet custom fontColor' 
+            variant='quiet' 
+            fontColor='#88fc03'
+        />
+    </div>
+    <div class="section">
+        <TextInput label='silent variant' variant='silent' />
+        <TextInput label='silent supplied value' value='beep bop boop' variant='silent' />
+        <TextInput 
+            type='password'
+            value='pa$$w0rd'
+            label='silent password' 
+            variant='silent' 
+        />
+        <TextInput 
+            placeholder='silent placeholder'
+            label='silent placeholder' 
+            variant='silent' 
+        />
+        <TextInput label='silent w/ appendInner' variant='silent'>
+            <Promote slot='appendInner' />
+        </TextInput>
+        <TextInput label='silent w/ append' variant='silent' clearable>
+            <Promote slot='append' />
+        </TextInput>
+        <TextInput 
+            label='silent invalid' 
+            variant='silent'  
+            invalid
+            message='invalid input message'
+        />
+        <TextInput 
+            label='silent custom accentColor' 
+            variant='silent' 
+            accentColor='orange'
+        />
+        <TextInput 
+            label='silent custom focusColor' 
+            variant='silent' 
+            focusColor='#88fc03'
+        />
+        <TextInput 
+            label='silent custom fontColor' 
+            variant='silent' 
+            fontColor='#88fc03'
         />
     </div>
 </Panel>

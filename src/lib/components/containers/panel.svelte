@@ -101,7 +101,7 @@
         --opacity-accent: 0.75;
         --opacity-accent--hover: .93;
         --opacity-accent--active: 1.0;
-        --opacity-border: .7;
+        --opacity-border: .4;
 
 
 

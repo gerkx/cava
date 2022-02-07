@@ -16,6 +16,7 @@
     export let pill:boolean = false;
     export let size:inputSize = null;
     export let starletteCSSProps: starletteProps = {};
+    export let tabindex:number|null = null;
     export let uppercase:boolean = false;
     export let variant:buttonVariant = null;
 
@@ -68,6 +69,7 @@
     class:solid
     class:uppercase
     disabled={disabled}
+    tabindex={tabindex}
     use:setCSSProps={comboCSSProps}
     on:click={() => dispatch('click')}
 >   {#if fontSize}
