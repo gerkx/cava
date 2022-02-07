@@ -273,13 +273,13 @@
 				bottom: 0;
 				z-index: -1;
 			}
-        }
-        &.focus:not(.invalid){
-			border-color: transparent;
-			&::after {
+			&.focus:not(.invalid){
 				border-color: transparent;
-				border-bottom-color: var(--focus-color);
-			}
+				&::after {
+					border-color: transparent;
+					border-bottom-color: var(--focus-color);
+				}
+        }
 		}
 		&.invalid {
 			&::after {
