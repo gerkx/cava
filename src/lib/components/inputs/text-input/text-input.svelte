@@ -157,28 +157,17 @@
 </div>
 
 <style type="text/scss">
+	@import '../../../scss/inputs.scss';
+
 	div {
-		// sizes
-		--width: auto;
-		--scale: 1;
-		--font-size: 1em;
-		--custom-font-size: 1em;
-		--calc-font-size: calc(var(--scale) * var(--font-size));
-		--calc-border-rad: calc(var(--scale) * var(--border-top-left-radius))
-			calc(var(--scale) * var(--border-top-right-radius))
-			calc(var(--scale) * var(--border-bottom-right-radius))
-			calc(var(--scale) * var(--border-bottom-left-radius));
-		--calc-height: calc(var(--scale) * var(--input-height));
-		--calc-padding-x: calc(var(--scale) * var(--padding-x));
-		--calc-padding-y: calc(var(--scale) * var(--padding-y));
+		@include input-sizing;
 		--focus-color: var(--primary);
 		--quiet-focus-color: var(--color-default);
 	}
 
 	input:not([type='submit']):not([type='file']) {
-		font-family: 'Open Sans', sans-serif;
-		font-size: var(--calc-font-size);
-		color: var(--button-primary-text);
+		@include input-typography;
+
 		box-sizing: border-box;
 		background-color: transparent;
 		display: block;
@@ -213,9 +202,6 @@
 		&.invalid {
 			border-color: var(--error);
 		}
-		// &.disabled {
-		// 	opacity: var(--opacity--disabled--text);
-		// }
 		&.focus:not(.invalid) {
 			border-color: var(--focus-color);
 		}
@@ -237,9 +223,9 @@
 				top: calc(var(--border-width) * -1);
 				bottom: calc(var(--border-width) * -1);
 				right: calc(var(--border-width) * -1);
-				z-index: -2;
+				z-index: -1;
 				border-radius: var(--calc-border-rad);
-				transition: opacity 0.22s cubic-bezier(0.58, 0.19, 0.22, 1);
+				transition: opacity 0.22s var(--std-ease);
 			}
 			&.focus {
 				color: var(--color-btn-active);

@@ -104,6 +104,7 @@
         --opacity-accent--active: 1.0;
         --opacity-border: .4;
 
+        --std-ease: cubic-bezier(0.58, 0.19, 0.22, 1)
 
 
         // // scalars

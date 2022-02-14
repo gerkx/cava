@@ -82,21 +82,10 @@
 </button>
 
 <style type='text/scss'>
+    @import '../../../scss/inputs.scss';
+
     button {
-        // sizes
-        --width: auto;
-        --scale: 1.0;
-        --font-size: 1em;
-        --custom-font-size: 1em;
-        --calc-font-size: calc(var(--scale)* var(--font-size));
-        --calc-border-rad:
-            calc(var(--scale) * var(--border-top-left-radius)) 
-            calc(var(--scale) * var(--border-top-right-radius)) 
-            calc(var(--scale) * var(--border-bottom-right-radius)) 
-            calc(var(--scale) * var(--border-bottom-left-radius));
-        --calc-height: calc(var(--scale) * var(--input-height));
-        --calc-padding-x: calc(var(--scale) * var(--padding-x));
-        --calc-padding-y: calc(var(--scale) * var(--padding-y));
+        @include input-sizing;
 
         // layout
         --justify-content: center;
@@ -105,9 +94,7 @@
     
         
         // properties
-        font-family: 'Open Sans', sans-serif;
-        font-size: var(--calc-font-size);
-        color: var(--button-primary-text);
+        @include input-typography;
         box-sizing: border-box;
         background-color: transparent;
 
@@ -140,7 +127,7 @@
             top: calc(var(--border-width) * -1);
             z-index: -1;
             opacity: var(--opacity-border);
-            transition: opacity .23s cubic-bezier(.58,.19,.22,1);
+            transition: opacity .23s var(--std-ease);
         }
         &:hover::after {
             opacity: var(--opacity-accent--hover);
