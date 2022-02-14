@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { buttonVariant, panelCSSProps, starletteProps, txtInputType } from '$lib/types';
+	import type { inputVariant, panelCSSProps, starletteProps, txtInputType } from '$lib/types';
 	import { nanoid } from 'nanoid';
 	import { setCSSProps } from '$lib/logic/style';
 
@@ -25,7 +25,7 @@
 	export let starletteCSSProps: starletteProps = {};
 	export let type: txtInputType = 'text';
 	export let value: string = '';
-	export let variant: buttonVariant = null;
+	export let variant: inputVariant = null;
 
 	let comboCSSProps = { ...starletteCSSProps, ...cssProps };
 	let focus: boolean = false;
@@ -33,7 +33,6 @@
 	let passwordVisible: boolean = false;
     let quiet: boolean = false;
 	let silent: boolean = false;
-	let solid: boolean = false;
 	
     if (accentColor) comboCSSProps = { ...comboCSSProps, ...{ colorDefault: accentColor } };
 	if (focusColor)

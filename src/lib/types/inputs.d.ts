@@ -1,5 +1,11 @@
 import type { baseCSSProps } from ".";
 
+export type inputVariant = (
+    'quiet' |
+    'silent' |
+    null
+)
+
 export type buttonVariant = (
     'quiet' |
     'silent' |
