@@ -79,11 +79,12 @@
         { #if label && label.length > 0 }
             <label for={id} class:disabled>{label}</label>
         { /if }
-        <div class=textarea class:quiet class:focus class:invalid>
+        <div class=textarea class:quiet class:focus class:invalid class:silent>
             <textarea
                 class:invalid
                 class:quiet
                 class:resize
+                class:silent
                 { disabled }
                 { placeholder }
                 bind:value
@@ -179,46 +180,81 @@
             background-color: transparent;
             border-color: transparent;
             position: relative;
-            
-            // opacity: var(--opacity-quiet);
             &:focus:not(.invalid) {
                 border-color: transparent;
 			    color: var(--color-dropdown-hover);
             }
 		}
+        &.silent {
+            border-color: transparent;
+            border-radius: 0;
+			position: relative;
+        }
+        &.silent {
+            &:focus {
+                border-color: transparent;
+            }
+        }
     }
     
-    .textarea.quiet {
-        position: relative;
-        &::after {
-            content: '';
-            box-sizing: border-box;
-            background-color: var(--color-default);
-            box-shadow: none;
-            opacity: var(--opacity-quiet);
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            left: 0;
-            top: 0;
-            z-index: -1;
-            border-radius: var(--calc-border-rad);
-            transition: opacity 0.22s var(--std-ease);
-        }
-        &.focus::after {
-            opacity: var(--opacity-quiet--focus);
-            background-color: var(--quiet-focus-color);
-        }
-        &.invalid {
+    .textarea {
+        &.quiet {
+            position: relative;
             &::after {
-                background-color: var(--error);
-                opacity: calc(var(--opacity-quiet) * 2);
+                content: '';
+                box-sizing: border-box;
+                background-color: var(--color-default);
+                box-shadow: none;
+                opacity: var(--opacity-quiet);
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                left: 0;
+                top: 0;
+                z-index: -1;
+                border-radius: var(--calc-border-rad);
+                transition: opacity 0.22s var(--std-ease);
             }
-            &.focus::after{
+            &.focus::after {
                 opacity: var(--opacity-quiet--focus);
+                background-color: var(--quiet-focus-color);
+            }
+            &.invalid {
+                &::after {
+                    background-color: var(--error);
+                    opacity: calc(var(--opacity-quiet) * 2);
+                }
+                &.focus::after{
+                    opacity: var(--opacity-quiet--focus);
+                }
             }
         }
-
+        &.silent {
+			position: relative;
+            &::after {
+                content: '';
+                box-sizing: border-box;
+                border-bottom: var(--border-width) solid var(--color-default);
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                left: 0;
+                top: 0;
+                z-index: -1;
+            }
+            &.focus:not(.invalid){
+				border-color: transparent;
+				&::after {
+					border-color: transparent;
+					border-bottom-color: var(--focus-color);
+				}
+            }
+            &.invalid {
+                &::after {
+                    border-bottom-color: var(--error);
+                }
+		}
+        }
     }
 
     label {

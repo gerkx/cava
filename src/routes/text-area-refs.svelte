@@ -84,6 +84,32 @@
             <TextArea label="custom fontColor" variant='quiet' fontColor='#e82098' />
         </div>
 	</div>
+	<div class="section">
+		<div class="beep">
+			<TextArea label="silent text area" variant='silent' />
+		</div>
+		<div class="beep">
+			<TextArea label="disabled quiet text area" variant='silent' disabled />
+		</div>
+		<div class="beep">
+			<TextArea label="text area w/ value" variant='silent' value='beep bop boop' />
+		</div>
+		<div class="beep">
+			<TextArea label="text area w/ placeholder" variant='silent' placeholder="placeholder text... blah blah blah" />
+		</div>  
+		<div class="beep">
+            <TextArea label="invalid text area" variant='silent' invalid message="invalid message" />
+		</div>
+        <div class="beep">
+            <TextArea label="custom accentColor" variant='silent' accentColor='#e82098'/>
+        </div>
+        <div class="beep">
+            <TextArea label="custom focusColor" variant='silent' focusColor='#e82098' />
+        </div>
+        <div class="beep">
+            <TextArea label="custom fontColor" variant='silent' fontColor='#e82098' />
+        </div>
+	</div>
 </Panel>
 
 <style type="text/scss">
