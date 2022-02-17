@@ -1,6 +1,8 @@
 <script lang='ts'>
-    import type { inputVariant, panelCSSProps, starletteProps, txtInputType } from '$lib/types';
 	import { nanoid } from 'nanoid';
+	import { setCSSProps } from '$lib/logic/style';
+    import type { inputVariant, panelCSSProps, starletteProps, txtInputType } from '$lib/types';
+
     // COMPONENTS //
 	import Btn from '$lib/components/inputs/btn/btn.svelte';
     // ICONS //
@@ -28,16 +30,13 @@
     export let resize: boolean = false;
 	export let value: string = '';
 
-    let comboCSSProps = { ...starletteCSSProps, ...cssProps };
-	
-    const clearValue = () => { value = ''; inputElement.focus(); };
+	let textAreaElement: HTMLTextAreaElement;
+    const clearValue = () => { value = ''; textAreaElement.focus(); };
 
     let focus: boolean = false;
-	let inputElement: HTMLTextAreaElement;
-	let passwordVisible: boolean = false;
-    let quiet: boolean = false;
-	let silent: boolean = false;
+    const toggleFocus = () => (focus = !focus);
 
+    let comboCSSProps = { ...starletteCSSProps, ...cssProps };
     if (accentColor) comboCSSProps = { ...comboCSSProps, ...{ colorDefault: accentColor } };
 	if (focusColor)
 		comboCSSProps = {
@@ -46,41 +45,75 @@
 		};
 	if (fontColor) comboCSSProps = { ...comboCSSProps, ...{ buttonPrimaryText: fontColor } };
 
+    let quiet: boolean = false;
+	let silent: boolean = false;
+    $: {
+		switch (variant) {
+			case 'quiet':
+				quiet = true;
+				silent = false;
+				break;
+			case 'silent':
+				quiet = false;
+				silent = true;
+				break;
+			default:
+				quiet = false;
+				silent = false;
+		}
+	}
+
 
 </script>
 
-<div class='wrapper'>
-    {#if label && label.length > 0}
-		<label for={id} class:disabled>{label}</label>
-	{/if}
+<div class='wrapper' class:disabled use:setCSSProps={comboCSSProps}>
+    <!-- prepend block -->
+    { #if $$slots.prepend } 
+        <div class='appendage'>
+            <span class='append-slot'><slot name="prepend" /></span>
+        </div>
+    { /if }
+
+    <!-- main block -->
     <div class='textarea-wrapper'>
-        <textarea
-            class:resize
-            class:invalid
-            bind:value
-            { placeholder }
-            bind:this={inputElement}
-        />
-        { #if clearable || invalid || $$slots.append }
+        { #if label && label.length > 0 }
+            <label for={id} class:disabled>{label}</label>
+        { /if }
+        <div class=textarea class:quiet class:focus class:invalid>
+            <textarea
+                class:invalid
+                class:quiet
+                class:resize
+                { disabled }
+                { placeholder }
+                bind:value
+                bind:this={textAreaElement}
+                on:focus={toggleFocus}
+                on:blur={toggleFocus}
+            />
+        </div>
+        {#if message && message.length > 1}
+            <div class="message" class:invalid>
+                {message}
+            </div>
+        {/if}
+    </div>
+    <!-- ------------ -->
+    <!-- append block -->
+    { #if clearable || invalid || $$slots.append }
         <div class='appendage'>
             { #if clearable }
-            <Btn 
-                variant='silent' 
-                tabindex={-1}
-                on:click={clearValue} >
-                <Close/>
-            </Btn>
+                <Btn 
+                    variant='silent' 
+                    tabindex={-1}
+                    on:click={clearValue} >
+                    <Close/>
+                </Btn>
             { /if }
-            <span class='append-slot'><slot name="append" /></span>
+            { #if $$slots.append }<span class='append-slot'><slot name="append" /></span> { /if }
             { #if invalid }<span class="alert"><Alert size="l" /></span> { /if }
         </div>
         { /if }
-        {#if message && message.length > 1}
-			<div class="message" class:invalid>
-				{message}
-			</div>
-		{/if}
-    </div>
 </div>
 
 <style type="text/scss">
@@ -91,12 +124,17 @@
         --focus-color: var(--primary);
         --quiet-focus-color: var(--color-default);
         width: 100%;
+        display: flex;
+        &.disabled {
+            opacity: var(--opacity--disabled--text);
+        }
     }
 
     .textarea-wrapper {
         width: 100%;
         display: flex;
         position: relative;
+        flex-direction: column;
     }
 
     .appendage {
@@ -105,9 +143,16 @@
         justify-content: space-between;
         align-items: center;
         padding: var(--calc-padding-x) 0;
+        margin-top: 1em;
     }
     .append-slot {
         padding: 0 var(--calc-padding-x);
+        &:first-child {
+            padding-top: var(--calc-padding-x);
+        }
+        &:last-child {
+            padding-bottom: 0;
+        }
     }
 
     textarea {
@@ -130,15 +175,55 @@
         &.resize {
             resize: vertical;
         }
+        &.quiet {
+            background-color: transparent;
+            border-color: transparent;
+            position: relative;
+            
+            // opacity: var(--opacity-quiet);
+            &:focus:not(.invalid) {
+                border-color: transparent;
+			    color: var(--color-dropdown-hover);
+            }
+		}
+    }
+    
+    .textarea.quiet {
+        position: relative;
+        &::after {
+            content: '';
+            box-sizing: border-box;
+            background-color: var(--color-default);
+            box-shadow: none;
+            opacity: var(--opacity-quiet);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            z-index: -1;
+            border-radius: var(--calc-border-rad);
+            transition: opacity 0.22s var(--std-ease);
+        }
+        &.focus::after {
+            opacity: var(--opacity-quiet--focus);
+            background-color: var(--quiet-focus-color);
+        }
+        &.invalid {
+            &::after {
+                background-color: var(--error);
+                opacity: calc(var(--opacity-quiet) * 2);
+            }
+            &.focus::after{
+                opacity: var(--opacity-quiet--focus);
+            }
+        }
 
     }
 
     label {
 		display: block;
 		padding-left: var(--calc-padding-x);
-		&.disabled {
-			opacity: var(--opacity--disabled);
-		}
 	}
 
     .alert {
