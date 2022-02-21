@@ -1,53 +1,6 @@
 <script lang='ts'>
-import { createEventDispatcher } from "svelte";
-
-
-
-    const handleMove = (node: Element) => {
-        const track = node.parentElement;
-        return (event: MouseEvent | TouchEvent) => {
-            const { left, width } = track.getBoundingClientRect();
-            const clickOffset = 'touches' in event 
-                ? event.touches[0].clientX 
-                : event.clientX;
-            const clickPos = Math.min(Math.max((clickOffset - left) / width, 0), 1) || 0;
-            node.dispatchEvent(new CustomEvent('drag', { detail: clickPos })) 
-        }
-    }
-
-    const handleMouseDown = (node: Element) => {
-        const move = handleMove(node);
-        return (event: MouseEvent | TouchEvent) => {
-            event.preventDefault();
-            node.dispatchEvent(new CustomEvent('dragstart'))
-
-            
-            const moveEvent = 'touches' in event ? 'touchmove' : 'mousemove';
-            const upEvent = 'touches' in event ? 'touchend' : 'mouseup';
-            
-            const handleUp = (event: MouseEvent | TouchEvent) => {
-                event.stopPropagation();
-                document.removeEventListener(moveEvent, move);
-                document.removeEventListener(upEvent, handleUp);
-                node.dispatchEvent(new CustomEvent("dragend"));
-            }
-            
-            document.addEventListener(moveEvent, move);
-            document.addEventListener(upEvent, handleUp);
-        }
-    }
-
-    const handle = (node: Element) => {
-        const down = handleMouseDown(node);
-        node.addEventListener('touchstart', down);
-        node.addEventListener('mousedown', down);
-        return {
-            destroy() {
-                node.removeEventListener('touchstart', down);
-                node.removeEventListener('mousedown', down);
-            }
-        }
-    }
+    import { createEventDispatcher } from "svelte";
+    import { handleDrag } from '$lib/logic/inputs/horizontal-drag';
     
     export let pos: number;
     let active: boolean = false;
@@ -56,8 +9,8 @@ import { createEventDispatcher } from "svelte";
 </script>
 
 <div 
-    use:handle
-    on:drag={ ({ detail: v }) => pos = v }
+    use:handleDrag
+    on:drag={ ({ detail: val }) => pos = val }
     on:dragstart={ () => ((active = true), dispatch('active', true)) }
     on:dragend={ () => ((active = false), dispatch('active', false)) }
     style={`left: ${pos * 100}%`}
