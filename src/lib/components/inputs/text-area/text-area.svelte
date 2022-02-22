@@ -1,7 +1,7 @@
 <script lang='ts'>
 	import { nanoid } from 'nanoid';
 	import { setCSSProps } from '$lib/logic/style';
-    import type { inputVariant, panelCSSProps, starletteProps, txtInputType } from '$lib/types';
+    import type { inputVariant, panelCSSProps, starletteProps } from '$lib/types';
 
     // COMPONENTS //
 	import Btn from '$lib/components/inputs/btn/btn.svelte';

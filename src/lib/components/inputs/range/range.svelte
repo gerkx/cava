@@ -5,16 +5,35 @@
 
     // export let value;
 
-    export let value: number | [number, number] = .8;
+    export let value: number | [number, number] = 50;
+    export let min: number = 0;
+    export let max: number = 100;
+    export let step: number = 1;
+
     const range = !(typeof value === 'number') ? true : false;
     let internal_value = value;
+    const calcPercentage = (val: number, min: number, max: number): number => {
+        return val / (max - min)
+    }
 
     let val_a = range ? value[0] : 0;
-    let val_b = range ? value[1] : value; 
+    let val_b = typeof value === 'number' ? calcPercentage(value, min, max) : value[1]; 
     let low: number = val_a;
     let high: number = val_b;
-    let focus: string = `left: ${low * 100}%; right: ${(1 - high) * 100}%;`;
+    let focusTrack: string = `left: ${low * 100}%; right: ${(1 - high) * 100}%;`;
 
+
+    const calcValue = (percent: number, min: number, max: number): number => {
+        return (max - min) * percent
+    }
+    
+    const roundToStep = (value: number, step: number): number => {
+        return Math.round(value/step) * step
+    }
+    
+    const calcRelativeStep = (value: number, step: number, min: number, max: number): number => {
+        return calcPercentage(roundToStep(value, step), min, max);
+    }
 
     $: {
         if (range) {
@@ -23,10 +42,15 @@
             value = [low, high];
         }
         else {
+
+            val_b = calcRelativeStep(calcValue(val_b, min, max), step, min, max);
+            console.log(val_b)
             high = val_b
-            value = high;
+            console.log(calcValue(val_b, min, max))
+            console.log('---------------------------')
+            value = Math.round(calcValue(val_b, min, max));
         }
-        focus = `left: ${low * 100}%; right: ${(1 - high) * 100}%;`
+        focusTrack = `left: ${low * 100}%; right: ${(1 - val_b) * 100}%;`
         // value = value;
     }
     
@@ -38,10 +62,10 @@
         
         <div 
             class="track-fill" 
-            style={focus}
+            style={focusTrack}
         />
-        { #if range } <RangeHandle bind:pos={val_a} /> { /if }
-        <RangeHandle bind:pos={val_b} />
+        { #if range } <RangeHandle bind:value={val_a} /> { /if }
+        <RangeHandle bind:value={val_b} />
     </div>
 </div>
 <!-- <input type="range" name="" id="" /> -->

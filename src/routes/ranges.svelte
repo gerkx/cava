@@ -2,13 +2,13 @@
     import Panel from '$lib/components/containers/panel.svelte';
     import Range from '$lib/components/inputs/range/range.svelte';
 	import Promote from '$lib/components/icons/Promote.svelte';
-    let val = 0.5;
+    let val = 50;
 </script>
 
 <div class='section'>
     {val}
     <Panel>
-        <Range bind:value={val} />
+        <Range bind:value={val} step={10} min={10} max={100} />
     </Panel>
 </div>
 

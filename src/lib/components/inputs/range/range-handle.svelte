@@ -2,7 +2,7 @@
     import { createEventDispatcher } from "svelte";
     import { handleDrag } from '$lib/logic/inputs/horizontal-drag';
     
-    export let pos: number;
+    export let value: number;
     let active: boolean = false;
     const dispatch = createEventDispatcher();
 
@@ -10,10 +10,10 @@
 
 <div 
     use:handleDrag
-    on:drag={ ({ detail: val }) => pos = val }
+    on:drag={ ({ detail: val }) => value = val }
     on:dragstart={ () => ((active = true), dispatch('active', true)) }
     on:dragend={ () => ((active = false), dispatch('active', false)) }
-    style={`left: ${pos * 100}%`}
+    style={`left: ${value * 100}%`}
 />
     
 <style type='text/scss'>
