@@ -5,22 +5,18 @@
 
     // export let value;
 
-    export let value: number | [number, number] = 50;
+    export let value: number | [number, number];
     export let min: number = 0;
     export let max: number = 100;
     export let step: number = 1;
 
     const range = !(typeof value === 'number') ? true : false;
-    let internal_value = value;
-    const calcPercentage = (val: number, min: number, max: number): number => {
-        return val / (max - min)
-    }
+    console.log(value)
+    
 
-    let val_a = range ? value[0] : 0;
-    let val_b = typeof value === 'number' ? calcPercentage(value, min, max) : value[1]; 
-    let low: number = val_a;
-    let high: number = val_b;
-    let trackFill: string = `left: ${low * 100}%; right: ${(1 - high) * 100}%;`;
+    const calcPercentage = (val: number, min: number, max: number): number => {
+        return (val - min) / (max - min)
+    }
 
     const calcValue = (percent: number, min: number, max: number): number => {
         return (max - min) * percent
@@ -34,6 +30,14 @@
         return calcPercentage(roundToStep(value, step), min, max);
     }
 
+    const calcTrackStep = () => 1/((max-min)/step);
+    
+    let val_a = range ? calcPercentage(value[0], min, max) : 0;
+    let val_b = typeof value === 'number' ? calcPercentage(value, min, max) : calcPercentage(value[1], min, max);
+    let low: number = Math.min(val_a, val_b);
+    let high: number = Math.min(val_a, val_b);
+    let trackFill: string = `left: ${low * 100}%; right: ${(1 - high) * 100}%;`;
+
     $: {
         if (range) {
             val_a = calcRelativeStep(calcValue(val_a, min, max), step, min, max)
@@ -44,15 +48,11 @@
             console.log
         }
         else {
-            console.log(val_b)
-            val_b = calcRelativeStep(calcValue(val_b, min, max), step, min, max);
-            console.log(val_b)
+            val_b = (val_b/(calcTrackStep())) * calcTrackStep()
             high = val_b
-            value = Math.round(calcValue(val_b, min, max)) + min;
+            value = roundToStep(calcValue(val_b, min, max) + min, step);
         }
-        trackFill = `left: ${low * 100}%; right: ${(1 - val_b) * 100}%;`
-        console.log(trackFill)
-        // value = value;
+        trackFill = `left: ${low * 100}%; right: ${(1 - high) * 100}%;`
     }
     
 
