@@ -20,8 +20,7 @@
     let val_b = typeof value === 'number' ? calcPercentage(value, min, max) : value[1]; 
     let low: number = val_a;
     let high: number = val_b;
-    let focusTrack: string = `left: ${low * 100}%; right: ${(1 - high) * 100}%;`;
-
+    let trackFill: string = `left: ${low * 100}%; right: ${(1 - high) * 100}%;`;
 
     const calcValue = (percent: number, min: number, max: number): number => {
         return (max - min) * percent
@@ -37,20 +36,22 @@
 
     $: {
         if (range) {
+            val_a = calcRelativeStep(calcValue(val_a, min, max), step, min, max)
+            val_b = calcRelativeStep(calcValue(val_b, min, max), step, min, max)
             low = Math.min(val_a, val_b);
             high = Math.max(val_a, val_b);
-            value = [low, high];
+            value = [Math.round(low), Math.round(high)];
+            console.log
         }
         else {
-
+            console.log(val_b)
             val_b = calcRelativeStep(calcValue(val_b, min, max), step, min, max);
             console.log(val_b)
             high = val_b
-            console.log(calcValue(val_b, min, max))
-            console.log('---------------------------')
-            value = Math.round(calcValue(val_b, min, max));
+            value = Math.round(calcValue(val_b, min, max)) + min;
         }
-        focusTrack = `left: ${low * 100}%; right: ${(1 - val_b) * 100}%;`
+        trackFill = `left: ${low * 100}%; right: ${(1 - val_b) * 100}%;`
+        console.log(trackFill)
         // value = value;
     }
     
@@ -62,7 +63,7 @@
         
         <div 
             class="track-fill" 
-            style={focusTrack}
+            style={trackFill}
         />
         { #if range } <RangeHandle bind:value={val_a} /> { /if }
         <RangeHandle bind:value={val_b} />
@@ -77,8 +78,6 @@
         height: var(--input-height);
         display: flex;
         align-items: center;
-        // padding: var(--padding-x);
-        // margin: var(--range-margin) 0;
 
     }
 

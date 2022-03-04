@@ -2,13 +2,23 @@
     import Panel from '$lib/components/containers/panel.svelte';
     import Range from '$lib/components/inputs/range/range.svelte';
 	import Promote from '$lib/components/icons/Promote.svelte';
-    let val = 50;
+    // let val: [number, number] = [20, 40];
+    let val: 70;
+
+    let history = [
+        'start',
+        'progress',
+        'mistake',
+        'save'
+    ]
+    let current;
+    // $: current = history[val]
 </script>
 
+{val}
 <div class='section'>
-    {val}
     <Panel>
-        <Range bind:value={val} step={10} min={10} max={100} />
+        <Range bind:value={val} step={1} min={10} max={100} />
     </Panel>
 </div>
 
