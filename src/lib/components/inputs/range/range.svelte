@@ -48,7 +48,7 @@
             console.log
         }
         else {
-            val_b = (val_b/(calcTrackStep())) * calcTrackStep()
+            val_b = (val_b/calcTrackStep()) * calcTrackStep()
             high = val_b
             value = roundToStep(calcValue(val_b, min, max) + min, step);
         }
