@@ -3,7 +3,9 @@
     import Range from '$lib/components/inputs/range/range.svelte';
 	import Promote from '$lib/components/icons/Promote.svelte';
     // let val: [number, number] = [20, 40];
-    let val = 0;
+    let low = 0;
+    let high = 100;
+    let val = 50;
 
     let history = [
         'start',
@@ -14,11 +16,16 @@
     let current;
     // $: current = history[val]
 </script>
-
-{val}
+low: {low}
+<br/>
+high: {high}
+<br/>
+value: {val}
 <div class='section'>
     <Panel>
-        <Range bind:value={val} step={0.5} min={-20} max={50} />
+        <Range bind:value={low} step={1} min={-50} max={50} />
+        <Range bind:value={high} step={1} min={50} max={150} />
+        <Range bind:value={val} step={1} min={low} max={high} />
     </Panel>
 </div>
 
