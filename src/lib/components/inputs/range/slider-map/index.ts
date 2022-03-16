@@ -19,17 +19,18 @@ export default class SliderMap {
             ? this.calcSteppedPercentage(this.calcPercentage(value)) 
             : this.calcSteppedPercentage(this.calcPercentage(value[1])) 
     }
+    private get _range() { return this._max - this._min === 0 ? .0001 : this._max - this._min }
 
     calcSteppedPercentage(val: number) {
         return (val/this.calcTrackStep()) * this.calcTrackStep()
     }
 
     calcPercentage = (val: number): number => {
-        return (val - this._min) / (this._max - this._min)
+        return (val - this._min) / this._range
     }
-
+    
     calcTrackStep = (): number => {
-        return 1/((this._max-this._min)/this._step);
+        return 1/(this._range/this._step);
     }
     
     calcValue = (percent: number): number => {
@@ -41,10 +42,26 @@ export default class SliderMap {
     }
 
     public get min(): number { return this._min }
-    public set min(newMin: number) { this._min = newMin }
+    public set min(newMin: number) {
+        const currVal = this.values;
+        this._min = newMin 
+        const offsetVal = currVal.map(x => {
+            return this.calcSteppedPercentage(this.calcPercentage(x))
+        })
+        this._valueA = this.range ? offsetVal[0] : 0;
+        this._valueB = offsetVal[1];
+    }
     
     public get max(): number { return this._max }
-    public set max(newMax: number) { this._max = newMax }
+    public set max(newMax: number) { 
+        const currVal = this.values;
+        this._max = newMax;
+        const offsetVal = currVal.map(x => {
+            return this.calcSteppedPercentage(this.calcPercentage(x))
+        })
+        this._valueA = this.range ? offsetVal[0] : 0;
+        this._valueB = offsetVal[1];
+    }
     
     public get step(): number { return this._step }
     public set step(newStep: number) { this._step = newStep }
@@ -59,8 +76,14 @@ export default class SliderMap {
         this._valueB = this.calcSteppedPercentage(val);
      }
 
-    public get low(): number { return Math.min(this._valueA, this._valueB) }
-    public get high(): number { return Math.max(this._valueA, this._valueB) }
+    public get low(): number { 
+        const min = Math.min(this._valueA, this._valueB) 
+        return min > 0 ? min : 0
+    }
+    public get high(): number { 
+        const max = Math.max(this._valueA, this._valueB) 
+        return max < 1 ? max : 1
+    }
 
     public get range() { return typeof this._value !== 'number'}
 
@@ -75,6 +98,8 @@ export default class SliderMap {
     public get values(): [number, number] {
         const outputA = this.roundToStep(this.calcValue(this._valueA) + this.min);
         const outputB = this.roundToStep(this.calcValue(this._valueB) + this.min);
-        return [outputA, outputB] 
+        const outMin = Math.min(outputA, outputB);
+        const outMax = Math.max(outputA, outputB);
+        return [outMin, outMax] 
     }
 }

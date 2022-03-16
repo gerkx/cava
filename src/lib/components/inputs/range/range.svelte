@@ -28,7 +28,6 @@
         <RangeHandle bind:value={sliderMap.valueB} />
     </div>
 </div>
-<!-- <input type="range" name="" id="" /> -->
 
 <style type='text/scss'>
     .range {
@@ -42,7 +41,8 @@
 
     .track {
         width: 100%;
-        height: calc(var(--border-width) * 0.5);
+        // height: var(--border-width);
+        height: max(2px, calc(var(--border-width) * 1));
         // height: calc(var(--border-width) * 1);
         background-color: var(--color-default);
         margin: 0 var(--padding-x);
@@ -56,7 +56,7 @@
         top: 0;
         bottom: 0;
         background-color: var(--primary);   
-        transform: scaleY(2);
+        // transform: scaleY(2);
     }
 
 </style>
