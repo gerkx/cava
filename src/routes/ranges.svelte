@@ -19,9 +19,9 @@
 <div class='section'>
     value: {val} ... min: {low} ... max: {high}
     <Panel>
-        <Range bind:value={low} step={1} min={-50} max={50} />
+        <Range bind:value={low} step={1} min={-50} max={50}  handleSolid />
         <Range bind:value={high} step={1} min={50} max={150} />
-        <Range bind:value={val} step={1} min={low} max={high} />
+        <Range bind:value={val} step={2} min={low} max={high} label='range slider' trackOpacity={0.2} trackHeight='2em' handleSize={['1em', '2.25em']} handleShape='square'/>
     </Panel>
 </div>
 
