@@ -11,8 +11,8 @@
     export let focusColor: string | null = null;
     export let trackHeight: string | null = null;
     export let trackOpacity: number | null = null;
-    export let handleBorderColor: string | null = null;
-    export let handleFillColor: string | null = null;
+    export let handleColor: string | null = null;
+    export let handleFocusColor: string | null = null;
     export let handleShape: 'circle' | 'square' = 'circle';
     export let handleSize: string | [string, string] | null = null;
     export let handleSolid: boolean = false;
@@ -30,8 +30,8 @@
     if (focusColor) comboCSSProps = { ...comboCSSProps, ...{ focusColor } }
     if (trackHeight) comboCSSProps = { ...comboCSSProps, ...{ trackHeight } }
     if (trackOpacity) comboCSSProps = { ...comboCSSProps, ...{ trackOpacity } }
-    if (handleBorderColor) comboCSSProps = { ...comboCSSProps, ...{ handleBorderColor } }
-    if (handleFillColor) comboCSSProps = { ...comboCSSProps, ...{ handleFillColor } }
+    if (handleColor) comboCSSProps = { ...comboCSSProps, ...{ handleColor } }
+    if (handleFocusColor) comboCSSProps = { ...comboCSSProps, ...{ handleFocusColor } }
     if (handleSize) {
         if (typeof handleSize === 'string') {
             comboCSSProps = { ...comboCSSProps, ...{ handleWidth: handleSize, handleHeight: handleSize } }
@@ -63,9 +63,21 @@
             <div class='track-bg'></div>
             <div class="track-fill" style={sliderMap.trackFill} />
             { #if sliderMap.range } 
-                <RangeHandle bind:value={sliderMap.valueA} step={sliderMap.calcTrackStep()} {square} {disabled} solid={handleSolid} /> 
+                <RangeHandle 
+                    bind:value={sliderMap.valueA} 
+                    solid={handleSolid} 
+                    step={sliderMap.calcTrackStep()} 
+                    {square} 
+                    {disabled} 
+                /> 
             { /if }
-            <RangeHandle bind:value={sliderMap.valueB} step={sliderMap.calcTrackStep()} {square} {disabled} solid={handleSolid} />
+            <RangeHandle 
+                bind:value={sliderMap.valueB} 
+                solid={handleSolid} 
+                step={sliderMap.calcTrackStep()} 
+                {square} 
+                {disabled} 
+            />
         </div>
     </div>
 </div>
@@ -77,8 +89,9 @@
         @include input-sizing;
         --accent-color: var(--color-default);
         --focus-color: var(--primary);
+        --handle-color: var(--color-default);
         --handle-fill-color: var(--color-bg);
-        --handle-border-color: var(--primary);
+        --handle-focus-color: var(--primary);
         --handle-height: 1em;
         --handle-width: 1em;
         --handle-opacity: 0.91;
@@ -131,8 +144,7 @@
     }
 
     label {
-		display: block;
-		padding-left: var(--calc-padding-x);
+		@include input-label;
 	}
 
 </style>
