@@ -58,27 +58,35 @@
         <label for={id} class:disabled>{label}</label>
     {/if}
     
-    <div class='range' id={id}>
-        <div class='track'>
-            <div class='track-bg'></div>
-            <div class="track-fill" style={sliderMap.trackFill} />
-            { #if sliderMap.range } 
-                <RangeHandle 
-                    bind:value={sliderMap.valueA} 
-                    solid={handleSolid} 
-                    step={sliderMap.calcTrackStep()} 
-                    {square} 
-                    {disabled} 
-                /> 
-            { /if }
-            <RangeHandle 
-                bind:value={sliderMap.valueB} 
-                solid={handleSolid} 
-                step={sliderMap.calcTrackStep()} 
-                {square} 
-                {disabled} 
-            />
+    <div class='slots'>
+        { #if $$slots.prepend }
+            <slot name='prepend' />
+        { /if }
+        <div class='range' id={id}>
+            <div class='track'>
+                <div class='track-bg'></div>
+                <div class="track-fill" style={sliderMap.trackFill} />
+                { #if sliderMap.range }
+                    <RangeHandle
+                        bind:value={sliderMap.valueA}
+                        solid={handleSolid}
+                        step={sliderMap.calcTrackStep()}
+                        {square}
+                        {disabled}
+                    />
+                { /if }
+                <RangeHandle
+                    bind:value={sliderMap.valueB}
+                    solid={handleSolid}
+                    step={sliderMap.calcTrackStep()}
+                    {square}
+                    {disabled}
+                />
+            </div>
         </div>
+        { #if $$slots.append }
+            <slot name='append' />
+        { /if }
     </div>
 </div>
 
@@ -108,8 +116,13 @@
         }
     }
 
+    .slots {
+        display: flex;
+        align-items: center;
+    }
+
     .range {
-        --range-margin: calc(var(--input-height) * 0.5);
+        // --range-margin: calc(var(--input-height) * 0.5);
         width: 100%;
         height: var(--input-height);
         display: flex;
