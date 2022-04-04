@@ -258,8 +258,7 @@
     }
 
     label {
-		display: block;
-		padding-left: var(--calc-padding-x);
+		@include input-label
 	}
 
     .alert {

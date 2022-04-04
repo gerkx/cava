@@ -19,3 +19,8 @@
     font-size: var(--calc-font-size);
     color: var(--button-primary-text);
 }
+
+@mixin input-label {
+    display: block;
+    padding-left: var(--calc-padding-x);
+}
